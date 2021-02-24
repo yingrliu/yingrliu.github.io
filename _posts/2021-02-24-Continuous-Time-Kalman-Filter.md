@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Continuous-Time Kalman Filter
+title: [Math] Continuous-Time Kalman Filter
 date: 2021-02-24
 Author: Shengbin 
 tags: [Study Notes, Statistical Signal Processing]
