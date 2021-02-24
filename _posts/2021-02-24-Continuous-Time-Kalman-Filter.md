@@ -91,6 +91,7 @@ $$
 $$
 
 We also have
+
 $$
 P_k = (I - K_k C_k)P_k^f,\\
 P_k^f = A_{k-1}P_{k-1}A_{k-1}^T + Q_{k-1}.
