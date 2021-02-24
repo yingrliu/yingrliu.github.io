@@ -81,9 +81,10 @@ footer-links:
 # 输入Gitalk相关设定，即可添加评论区，具体请看教程
 gitalk:
   clientID: d85485b0f88307643a90
-  clientSecret: ad9d4d1087cede6ba644654a82332775e298094b
+  clientSecret: 8bb87be3ff47931b03fc91a7118fc7482ced3c2a
   repo: yingrliu.github.io
   owner: yingrliu
+  admin: yingrliu
 
 # 输入Google Analytics web tracking code
 google_analytics:
