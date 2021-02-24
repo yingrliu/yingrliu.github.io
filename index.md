@@ -1,37 +1,17 @@
-## Welcome to GitHub Pages
+---
+layout: default
+---
 
-You can use the [editor on GitHub](https://github.com/yingrliu/yingrliu.github.io/edit/main/index.md) to maintain and preview the content for your website in Markdown files.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+# About Me
 
-### Markdown
+I am currently a 6th-year Phd student on Machine Learning in Stony Brook Univeristy (SBU). 
+I concentrates on designing reusable deep generative models for capturing the stochasticity and 
+dynamics of sequential data. Before that, I received Bachelor degree of Automation Control from 
+University of Electronic Science and Technology of China (UESTC).
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+I have a broad range of interest and curiosity in research. Learning brings me a lot of happiness both inside and outside the academics. If you think we could work together for some challenging works, I am glad to learn from you.
 
-```markdown
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/yingrliu/yingrliu.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+# News
+- **[Feb. 2020]**             One paper accepted by **AAAI-20**!
