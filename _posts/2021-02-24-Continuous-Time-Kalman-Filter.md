@@ -2,7 +2,7 @@
 layout: post
 title: [Math] Continuous-Time Kalman Filter
 date: 2021-02-24
-Author: Shengbin 
+Author: Yingru Liu 
 tags: [Study Notes, Statistical Signal Processing]
 comments: true
 toc: true
