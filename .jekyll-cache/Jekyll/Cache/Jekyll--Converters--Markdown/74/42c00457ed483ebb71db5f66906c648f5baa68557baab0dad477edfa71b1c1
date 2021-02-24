@@ -1,4 +1,4 @@
-I"í,<blockquote>
+I"î,<blockquote>
   <p>Up till now, I dont see any detailed deviation for the Continuous-Time Kalman Filter, the content of this note is all from the Chapter 8 of the Book: <strong>Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches.</strong></p>
 </blockquote>
 
@@ -63,9 +63,10 @@ v_{k-1} \sim \mathcal{N}(0, \frac{R_{(k-1)\Delta t}}{\Delta t}).\]
 \[\lim_{\Delta t\rightarrow 0} \frac{K_k}{\Delta t} = \lim_{\Delta t\rightarrow 0} P_k^f H_{k-1}^T(\Delta t H_{k-1} P_k^fH_{k-1}^T + R_{k-1})^{-1} \\
 = P_k^f H_{k-1}^T(R_{k-1})^{-1}.\]
 
-<p>We also have
-\(P_k = (I - K_k C_k)P_k^f,\\
-P_k^f = A_{k-1}P_{k-1}A_{k-1}^T + Q_{k-1}.\)</p>
+<p>We also have</p>
+
+\[P_k = (I - K_k C_k)P_k^f,\\
+P_k^f = A_{k-1}P_{k-1}A_{k-1}^T + Q_{k-1}.\]
 
 <p>Substituting <code class="language-plaintext highlighter-rouge">$A_{k-1}$</code> into it, we have</p>
 
