@@ -1,8 +1,8 @@
 ---
 layout: post
-title: [Math] Continuous-Time Kalman Filter
+title: Continuous-Time Kalman Filter
 date: 2021-02-24
-Author: Yingru Liu 
+Author: Yingru 
 tags: [Study Notes, Statistical Signal Processing]
 comments: true
 toc: true
