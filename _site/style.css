@@ -111,11 +111,11 @@ h3 {
 
 h4 {
   font-size: 20px;
-  color: #868e96;
+  color: #495057;
 }
 
 h6 {
-  color: #868e96;
+  color: #495057;
 }
 
 p {
@@ -263,7 +263,7 @@ blockquote {
 }
 
 blockquote p {
-  color: #868e96;
+  color: #495057;
 }
 
 blockquote p:last-child {
@@ -415,7 +415,7 @@ img {
 
 .site-description {
   margin: 15px auto;
-  color: #868e96;
+  color: #495057;
   font-size: 16px;
 }
 
@@ -509,7 +509,7 @@ nav a {
 }
 
 .pinned .feather-anchor {
-  color: #868e96;
+  color: #495057;
   padding: 2px;
   margin-right: 8px;
 }
@@ -517,14 +517,14 @@ nav a {
 .date {
   font-weight: 300;
   font-size: 14px;
-  color: #868e96;
+  color: #495057;
   margin-right: 4px;
 }
 
 .author {
   font-weight: 700;
   font-size: 14px;
-  color: #868e96;
+  color: #495057;
   margin-right: 4px;
 }
 
@@ -597,7 +597,7 @@ nav a {
 }
 
 .pagination > .prev a {
-  color: #868e96;
+  color: #495057;
   border: 1px solid #f1f3f5;
   padding: 10px 20px;
   background: #f8f9fa;
@@ -616,7 +616,7 @@ nav a {
 }
 
 .pagination > .next a {
-  color: #868e96;
+  color: #495057;
   border: 1px solid #f1f3f5;
   padding: 10px 20px;
   background: #f8f9fa;
@@ -633,7 +633,7 @@ nav a {
 }
 
 .archive time {
-  color: #868e96;
+  color: #495057;
   font-size: 14px;
   font-weight: 300;
   margin-left: 3px;
@@ -677,7 +677,7 @@ nav a {
 }
 
 .tags > .tag time {
-  color: #868e96;
+  color: #495057;
   font-size: 14px;
   font-weight: 300;
   margin-left: 3px;
@@ -719,7 +719,7 @@ footer {
 
 footer p {
   font-size: 14px;
-  color: #868e96;
+  color: #495057;
 }
 
 footer .svg-icon {
@@ -738,7 +738,7 @@ footer .svg-icon li {
 footer .svg-icon svg {
   height: 20px;
   width: 20px;
-  fill: #868e96;
+  fill: #495057;
 }
 
 footer .svg-icon svg:hover {
@@ -1688,7 +1688,7 @@ pre.highlight {
 }
 
 .gt-container .gt-version {
-  color: #ced4da;
+  color: #adb5bd;
   margin-left: 0.375em;
 }
 
@@ -1923,12 +1923,12 @@ pre.highlight {
   }*/
 .gt-container .gt-comment-text {
   margin-left: 0.5em;
-  color: #ced4da;
+  color: #adb5bd;
 }
 
 .gt-container .gt-comment-date {
   margin-left: 0.5em;
-  color: #ced4da;
+  color: #adb5bd;
 }
 
 .gt-container .gt-comment-like,

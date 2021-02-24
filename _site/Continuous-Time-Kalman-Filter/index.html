@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Continuous-Time Kalman Filter – Yingru Liu – A Personal Homepage</title>
+
+      <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="
+  Up till now, I dont see any detailed deviation for the Continuous-Time Kalman Filter, the content of this note is all from the Chapter 8 of the Book: Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches.
+
+
+Discretization
+
+Recalled that for a simplified state-space model
+$\frac{d}{dt} x_t = F_t x_t + B_tu_t,\quad z_t = H_tx_t + v_t, \quad t\geq 0$,
+we have
+
+\[x_t = \Phi(t, 0) x_0 + \int^t_0 \Phi(t, s)B_tu_s ds,\]
+
+where $\Phi(t, s)$ is the state transition function.
+Then by setting $0$ to $t_{k-1}$, $t$ to $t_k$ and assuming $B_t, u_t$ are approximately constant, we have
+
+\[x_{t_k} = \Phi(t_k, t_{k-1}) x_{t_{k-1}} + \int^{t_k}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot B_{t_{k-1}}u_{t_{k-1}}.\]
+
+The previous equation is exactly a discrete time state-space model:
+
+\[x_k = A_{k-1}x_{k-1} + G_{k-1} u_{k-1},\]
+
+where $A_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$ and $G_{k-1}=\int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot B_{t_{k-1}}$.
+
+Discretization for a full state-space model
+Consider the following state-space model:
+
+\[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t,\,\, w_t \sim \mathcal{N}(0, Q_t)\\
+y_t = H_t x_t + v_t,\,\, v_t \sim \mathcal{N}(0, R_t),\]
+
+its discretization is given as
+
+\[x_{k}= A_{k-1}x_{k-1} + B_{k-1}u_{k-1} + w_{k-1},\\
+w_{k-1} = \Lambda_{k-1}w_{(k-1)\Delta t}\\
+y_{k}=C_{k}x_{k} + v_{k},\]
+
+where
+
+\[A_{k-1} = \Phi(t_{k-1}+\Delta t, t_{k-1}),\\
+B_{k-1} = \int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot G_{t_{k-1}}\approx \Delta t I G_{t_{k-1}},\\
+\Lambda_{k-1}=\int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\approx \Delta t I,\\
+C_k = H_{(k-1)\Delta t},\\
+w_{k-1} \sim \mathcal{N}(0, Q_{(k-1)\Delta t}\Delta t),\\
+v_{k-1} \sim \mathcal{N}(0, \frac{R_{(k-1)\Delta t}}{\Delta t}).\]
+
+For simplicity, we define the notation $Q_{k-1}=Q_{(k-1)\Delta t}\Delta t$,  $R_{k-1}=\frac{R_{(k-1)\Delta t}}{\Delta t}$ and $\Phi_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$.
+
+Evaluating the Covariance after Discretization
+By the previous step, we can discretize the differential equation into an discrete difference equation. However, the covariances of white noise $w_t$ and $w_t$ should be carefully evaluated, so that the stochasititicy is identical.
+
+(i). The discretization of $w_t$ and $w_t$ is a little bit tricky (at leat in my opinion). In the book, If we discretize the state-space model, we can define a discrete-time Kalman Filter and the error of this book should be independent with $\Delta t$. To my understanding, we are discretizing the rectangle volume $\int_0^{\Delta t}R_{\tau}d\tau$ in the curve of $Q_t$ into a point value, to assure that the $\Delta t \times R$ is equal to the integral, we set $v_{t_{k-1}}\sim \mathcal{N}(0, R_{t_{k-1}}/\Delta t)$. Similarly, we set
+$w_{t_{k-1}}\sim \mathcal{N}(0, Q_{t_{k-1}}/\Delta t)$.
+
+(i). We replace $w_t$ by $\Lambda_{k-1}w_{t_{k-1}}$. As $\Lambda_{k-1}\approx \Delta t I$ and $w_{t_{k-1}}\sim \mathcal{N}(0, Q_{t_{k-1}}/\Delta t)$, $w_{k-1}\sim \mathcal{N}(0, \Delta t Q_{t_{k-1}})$.
+
+Deviation of Continuous-Time Kalman Filter
+After the discretization, we can define a discrete-time Kalman Filter whose $K_n$ is denoted as
+
+\[K_k = P_k^fC_k^TD_k^{-1}=P_k^fC_k^T(C_k P_k^f C_k^T + R_k)^{-1}\\
+= P_k^f H_{k-1}^T(H_{k-1} P_k^fH_{k-1}^T + R_{k-1}/\Delta t)^{-1},\]
+
+and therefore,
+
+\[\lim_{\Delta t\rightarrow 0} \frac{K_k}{\Delta t} = \lim_{\Delta t\rightarrow 0} P_k^f H_{k-1}^T(\Delta t H_{k-1} P_k^fH_{k-1}^T + R_{k-1})^{-1} \\
+= P_k^f H_{k-1}^T(R_{k-1})^{-1}.\]
+
+We also have
+\(P_k = (I - K_k C_k)P_k^f,\\
+P_k^f = A_{k-1}P_{k-1}A_{k-1}^T + Q_{k-1}.\)
+
+Substituting $A_{k-1}$ into it, we have
+
+\[P_{k}^f = \Phi_{k-1}P_{k-1}P_{k-1}^f\Phi_{k-1}^T + Q_{k-1}\Delta t\\\]
+
+By the property of STM, we further have
+
+\[P_{k}^f = (I + \Delta tF_{k-1}\Phi_{k-1})P_{k-1}(I + \Delta tF_{k-1}\Phi_{k-1})^T + Q_{k-1}\Delta t\\
+= P_{k-1} + \Delta tF_{k-1}\Phi_{k-1}P_{k-1} + \Delta t P_{k-1}\Phi_{k-1}^TF_{k-1}^T\\ + (\Delta t)^2F_{k-1}\Phi_{k-1}P_{k-1}\Phi_{k-1}^TF_{k-1}^T + Q_{k-1}\Delta t,\]
+
+Substituting $P_{k-1}^f$ into it, we have
+
+\[P_{k}^f = (I - K_{k-1} C_{k-1})P_{k-1}^f + \Delta tF_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f \\
++ \Delta t (I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\
++ (\Delta t)^2F_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\
++ Q_{(k-1)\Delta t}\Delta t,\]
+
+and
+
+\[\frac{P_{k}^f-P_{k-1}^f}{\Delta t} = -\frac{- K_{k-1} C_{k-1}P_{k-1}^f}{\Delta t} + F_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\\
++ (I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\
++ \Delta tF_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T.\]
+
+Taking the limitation yields:
+
+\[\lim_{\Delta t\rightarrow 0} \frac{P_{k}^f-P_{k-1}^f}{\Delta t} =-P_k^f H_{k-1}^TR_{k-1}^{-1}H_{k-1}^TP_{k-1}^f\\
++ F_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f + (I - K_{k-1} C_{k-1})P_{k-1}^fF_{k-1}^T + Q_{k-1}\\
+=\lim_{\Delta t\rightarrow 0} -P_k^f H_{k-1}^TR_{k-1}^{-1}H_{k-1}^TP_{k-1}^f + F_{k-1}P_{k-1}^f + P_{k-1}^fF_{k-1}^T\\
+- F_{k-1}K_{k-1} C_{k-1}P_{k-1}^f - K_{k-1} C_{k-1}P_{k-1}^fF_{k-1}^T + Q_{k-1}\\\]
+
+Recall that there is a $\Delta t$ in computing $K_{k-1}$, which leads to $\lim_{\Delta t\rightarrow 0}F_{k-1}K_{k-1} C_{k-1}P_{k-1}^f=0$ and $\lim_{\Delta t\rightarrow 0}K_{k-1} C_{k-1}P_{k-1}^fF_{k-1}^T=0$, we have
+
+\[\frac{d}{dt}P_t=-P_t H_t^TR_t^{-1}H_t^TP_t + F_tP_t + P_t F_t^T + Q_t,\]
+
+where $P_t$ is the continuous counterpart of prior covariance $P_k^f$ (not the posterior one). This equation is also an instance of the Differential Riccati Equation.
+
+For the estimate $x_k^a$, when $\Delta t\rightarrow 0$, we also have
+
+\[x_k^a = A_{k-1}x_{k-1}^a + B_{k-1} u_{k-1} + K_k(z_k - C_kA_{k-1}x_{k-1}^a - C_kB_{k-1} u_{k-1})\\
+=(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a + B_{k-1} u_{k-1} + K_k(z_k - C_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a - C_kB_{k-1} u_{k-1})\\
+= x_{k-1}^a + \Delta tF_{k-1}\Phi_{k-1}x_{k-1}^a + B_{k-1} u_{k-1} + K_kz_k-K_kC_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a\\
+-K_k C_kB_{k-1} u_{k-1},\\
+= x_{k-1}^a + \Delta tF_{k-1}\Phi_{k-1}x_{k-1}^a + \Delta t G_{k-1} u_{k-1} + \Delta tP_k^f H_{k-1}^T(R_{k-1})^{-1}z_k\\
+-\Delta tP_k^f H_{k-1}^T(R_{k-1})^{-1}H_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a\\
+-\Delta t P_k^f H_{k-1}^T(R_{k-1})^{-1} H_kB_{k-1} u_{k-1}.\]
+
+Hence, we have
+
+\[\lim_{\Delta t\rightarrow 0}\frac{x_k^a - x_{k-1}^a}{\Delta t} = F_{k-1}x_{k-1}^a+ G_{k-1}u_{k-1} + P_k^f H_{k-1}^T(R_{k-1})^{-1}(z_k-H_kx_{k-1}^a).\]
+
+That is
+
+\[\frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + P_k H_t^TR_t^{-1}(Z-H_t\hat{x}_t).\]
+
+Summary of Continuous-Time KF
+
+\[\frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + K_t(Z-H_t\hat{x}_t),\\
+\frac{d}{dt}P_t=-P_t H_t^TR_t^{-1}H_t^TP_t + F_tP_t + P_t F_t^T + Q_t,\\
+K_t = P_k H_t^TR_t^{-1}.\]
+
+Accelerated Method for Riccati Equation
+
+  The ODE of estimate covariance $P$ is a Differential Riccati Equation, which is computationally costly. To acclerate the algorithm, several algorithms have been proposed, including Transition Matrix Approach and Chandrasekhar Algorithm. Details can be found in the Chapter 8.3 in the Book: Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches.
+
+
+Continuous-Time KF for correlated Noise
+Consider the following continuous-time system:
+
+\[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t,\,\, w_t \sim \mathcal{N}(0, Q_t)\\
+y_t = H_t x_t + v_t,\,\, v_t \sim \mathcal{N}(0, R_t),\\
+\mathbb{E}(w_t v_\tau^T) = M_t\delta(t-\tau).\]
+
+As $w_t$ and $v_\tau$ are correlated in time $t$, we need to decorrelate them. We can rewrite the system dynamics as
+
+\[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t + M_tR_t^{-1}(y_t - H_t x_t - v_t)\\
+= (F_t-M_tR_t^{-1}H_t)x_t + M_t R_{t}^{-1}y_t + (w_t - M_tR_t^{-1}v_t)\\
+= \tilde{F}_t x_t + \tilde{u}_t + \tilde{w}_t.\]
+
+where
+
+\[\tilde{F}_t = F_t-M_tR_t^{-1}H_t,\,\, \tilde{u}_t=M_t R_{t}^{-1}y_t,\,\,\tilde{w}_t=w - M_tR_t^{-1}v_t.\]
+
+We have
+
+\[\mathbb{E}(\tilde{w}_t v_\tau^T) = \mathbb{E}(\tilde{w}_t v_\tau^T)= \mathbb{E}((w_t - M_tR_t^{-1}v_t) v_\tau^T) \\
+= \mathbb{E}(w_t v_\tau^T) - M_tR_t^{-1}\mathbb{E}(v_t v_t^T) = M - M = 0\]
+
+and
+
+\[\tilde{Q}_t = \mathbb{E}(\tilde{w}_t \tilde{w}_t^T) = Q_t - M_t R_t^{-1} M_t^T.\]
+
+We can define the continuous-time Kalman Filter for this equivalent dynamics system. In the book, it also introduces how to tackle the non-white noise.
+
+The Steady-State Continuous-Time Kalman Filter
+
+[To Be Continue]
+" />
+    <meta property="og:description" content="
+  Up till now, I dont see any detailed deviation for the Continuous-Time Kalman Filter, the content of this note is all from the Chapter 8 of the Book: Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches.
+
+
+Discretization
+
+Recalled that for a simplified state-space model
+$\frac{d}{dt} x_t = F_t x_t + B_tu_t,\quad z_t = H_tx_t + v_t, \quad t\geq 0$,
+we have
+
+\[x_t = \Phi(t, 0) x_0 + \int^t_0 \Phi(t, s)B_tu_s ds,\]
+
+where $\Phi(t, s)$ is the state transition function.
+Then by setting $0$ to $t_{k-1}$, $t$ to $t_k$ and assuming $B_t, u_t$ are approximately constant, we have
+
+\[x_{t_k} = \Phi(t_k, t_{k-1}) x_{t_{k-1}} + \int^{t_k}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot B_{t_{k-1}}u_{t_{k-1}}.\]
+
+The previous equation is exactly a discrete time state-space model:
+
+\[x_k = A_{k-1}x_{k-1} + G_{k-1} u_{k-1},\]
+
+where $A_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$ and $G_{k-1}=\int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot B_{t_{k-1}}$.
+
+Discretization for a full state-space model
+Consider the following state-space model:
+
+\[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t,\,\, w_t \sim \mathcal{N}(0, Q_t)\\
+y_t = H_t x_t + v_t,\,\, v_t \sim \mathcal{N}(0, R_t),\]
+
+its discretization is given as
+
+\[x_{k}= A_{k-1}x_{k-1} + B_{k-1}u_{k-1} + w_{k-1},\\
+w_{k-1} = \Lambda_{k-1}w_{(k-1)\Delta t}\\
+y_{k}=C_{k}x_{k} + v_{k},\]
+
+where
+
+\[A_{k-1} = \Phi(t_{k-1}+\Delta t, t_{k-1}),\\
+B_{k-1} = \int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot G_{t_{k-1}}\approx \Delta t I G_{t_{k-1}},\\
+\Lambda_{k-1}=\int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\approx \Delta t I,\\
+C_k = H_{(k-1)\Delta t},\\
+w_{k-1} \sim \mathcal{N}(0, Q_{(k-1)\Delta t}\Delta t),\\
+v_{k-1} \sim \mathcal{N}(0, \frac{R_{(k-1)\Delta t}}{\Delta t}).\]
+
+For simplicity, we define the notation $Q_{k-1}=Q_{(k-1)\Delta t}\Delta t$,  $R_{k-1}=\frac{R_{(k-1)\Delta t}}{\Delta t}$ and $\Phi_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$.
+
+Evaluating the Covariance after Discretization
+By the previous step, we can discretize the differential equation into an discrete difference equation. However, the covariances of white noise $w_t$ and $w_t$ should be carefully evaluated, so that the stochasititicy is identical.
+
+(i). The discretization of $w_t$ and $w_t$ is a little bit tricky (at leat in my opinion). In the book, If we discretize the state-space model, we can define a discrete-time Kalman Filter and the error of this book should be independent with $\Delta t$. To my understanding, we are discretizing the rectangle volume $\int_0^{\Delta t}R_{\tau}d\tau$ in the curve of $Q_t$ into a point value, to assure that the $\Delta t \times R$ is equal to the integral, we set $v_{t_{k-1}}\sim \mathcal{N}(0, R_{t_{k-1}}/\Delta t)$. Similarly, we set
+$w_{t_{k-1}}\sim \mathcal{N}(0, Q_{t_{k-1}}/\Delta t)$.
+
+(i). We replace $w_t$ by $\Lambda_{k-1}w_{t_{k-1}}$. As $\Lambda_{k-1}\approx \Delta t I$ and $w_{t_{k-1}}\sim \mathcal{N}(0, Q_{t_{k-1}}/\Delta t)$, $w_{k-1}\sim \mathcal{N}(0, \Delta t Q_{t_{k-1}})$.
+
+Deviation of Continuous-Time Kalman Filter
+After the discretization, we can define a discrete-time Kalman Filter whose $K_n$ is denoted as
+
+\[K_k = P_k^fC_k^TD_k^{-1}=P_k^fC_k^T(C_k P_k^f C_k^T + R_k)^{-1}\\
+= P_k^f H_{k-1}^T(H_{k-1} P_k^fH_{k-1}^T + R_{k-1}/\Delta t)^{-1},\]
+
+and therefore,
+
+\[\lim_{\Delta t\rightarrow 0} \frac{K_k}{\Delta t} = \lim_{\Delta t\rightarrow 0} P_k^f H_{k-1}^T(\Delta t H_{k-1} P_k^fH_{k-1}^T + R_{k-1})^{-1} \\
+= P_k^f H_{k-1}^T(R_{k-1})^{-1}.\]
+
+We also have
+\(P_k = (I - K_k C_k)P_k^f,\\
+P_k^f = A_{k-1}P_{k-1}A_{k-1}^T + Q_{k-1}.\)
+
+Substituting $A_{k-1}$ into it, we have
+
+\[P_{k}^f = \Phi_{k-1}P_{k-1}P_{k-1}^f\Phi_{k-1}^T + Q_{k-1}\Delta t\\\]
+
+By the property of STM, we further have
+
+\[P_{k}^f = (I + \Delta tF_{k-1}\Phi_{k-1})P_{k-1}(I + \Delta tF_{k-1}\Phi_{k-1})^T + Q_{k-1}\Delta t\\
+= P_{k-1} + \Delta tF_{k-1}\Phi_{k-1}P_{k-1} + \Delta t P_{k-1}\Phi_{k-1}^TF_{k-1}^T\\ + (\Delta t)^2F_{k-1}\Phi_{k-1}P_{k-1}\Phi_{k-1}^TF_{k-1}^T + Q_{k-1}\Delta t,\]
+
+Substituting $P_{k-1}^f$ into it, we have
+
+\[P_{k}^f = (I - K_{k-1} C_{k-1})P_{k-1}^f + \Delta tF_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f \\
++ \Delta t (I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\
++ (\Delta t)^2F_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\
++ Q_{(k-1)\Delta t}\Delta t,\]
+
+and
+
+\[\frac{P_{k}^f-P_{k-1}^f}{\Delta t} = -\frac{- K_{k-1} C_{k-1}P_{k-1}^f}{\Delta t} + F_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\\
++ (I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\
++ \Delta tF_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T.\]
+
+Taking the limitation yields:
+
+\[\lim_{\Delta t\rightarrow 0} \frac{P_{k}^f-P_{k-1}^f}{\Delta t} =-P_k^f H_{k-1}^TR_{k-1}^{-1}H_{k-1}^TP_{k-1}^f\\
++ F_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f + (I - K_{k-1} C_{k-1})P_{k-1}^fF_{k-1}^T + Q_{k-1}\\
+=\lim_{\Delta t\rightarrow 0} -P_k^f H_{k-1}^TR_{k-1}^{-1}H_{k-1}^TP_{k-1}^f + F_{k-1}P_{k-1}^f + P_{k-1}^fF_{k-1}^T\\
+- F_{k-1}K_{k-1} C_{k-1}P_{k-1}^f - K_{k-1} C_{k-1}P_{k-1}^fF_{k-1}^T + Q_{k-1}\\\]
+
+Recall that there is a $\Delta t$ in computing $K_{k-1}$, which leads to $\lim_{\Delta t\rightarrow 0}F_{k-1}K_{k-1} C_{k-1}P_{k-1}^f=0$ and $\lim_{\Delta t\rightarrow 0}K_{k-1} C_{k-1}P_{k-1}^fF_{k-1}^T=0$, we have
+
+\[\frac{d}{dt}P_t=-P_t H_t^TR_t^{-1}H_t^TP_t + F_tP_t + P_t F_t^T + Q_t,\]
+
+where $P_t$ is the continuous counterpart of prior covariance $P_k^f$ (not the posterior one). This equation is also an instance of the Differential Riccati Equation.
+
+For the estimate $x_k^a$, when $\Delta t\rightarrow 0$, we also have
+
+\[x_k^a = A_{k-1}x_{k-1}^a + B_{k-1} u_{k-1} + K_k(z_k - C_kA_{k-1}x_{k-1}^a - C_kB_{k-1} u_{k-1})\\
+=(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a + B_{k-1} u_{k-1} + K_k(z_k - C_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a - C_kB_{k-1} u_{k-1})\\
+= x_{k-1}^a + \Delta tF_{k-1}\Phi_{k-1}x_{k-1}^a + B_{k-1} u_{k-1} + K_kz_k-K_kC_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a\\
+-K_k C_kB_{k-1} u_{k-1},\\
+= x_{k-1}^a + \Delta tF_{k-1}\Phi_{k-1}x_{k-1}^a + \Delta t G_{k-1} u_{k-1} + \Delta tP_k^f H_{k-1}^T(R_{k-1})^{-1}z_k\\
+-\Delta tP_k^f H_{k-1}^T(R_{k-1})^{-1}H_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a\\
+-\Delta t P_k^f H_{k-1}^T(R_{k-1})^{-1} H_kB_{k-1} u_{k-1}.\]
+
+Hence, we have
+
+\[\lim_{\Delta t\rightarrow 0}\frac{x_k^a - x_{k-1}^a}{\Delta t} = F_{k-1}x_{k-1}^a+ G_{k-1}u_{k-1} + P_k^f H_{k-1}^T(R_{k-1})^{-1}(z_k-H_kx_{k-1}^a).\]
+
+That is
+
+\[\frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + P_k H_t^TR_t^{-1}(Z-H_t\hat{x}_t).\]
+
+Summary of Continuous-Time KF
+
+\[\frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + K_t(Z-H_t\hat{x}_t),\\
+\frac{d}{dt}P_t=-P_t H_t^TR_t^{-1}H_t^TP_t + F_tP_t + P_t F_t^T + Q_t,\\
+K_t = P_k H_t^TR_t^{-1}.\]
+
+Accelerated Method for Riccati Equation
+
+  The ODE of estimate covariance $P$ is a Differential Riccati Equation, which is computationally costly. To acclerate the algorithm, several algorithms have been proposed, including Transition Matrix Approach and Chandrasekhar Algorithm. Details can be found in the Chapter 8.3 in the Book: Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches.
+
+
+Continuous-Time KF for correlated Noise
+Consider the following continuous-time system:
+
+\[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t,\,\, w_t \sim \mathcal{N}(0, Q_t)\\
+y_t = H_t x_t + v_t,\,\, v_t \sim \mathcal{N}(0, R_t),\\
+\mathbb{E}(w_t v_\tau^T) = M_t\delta(t-\tau).\]
+
+As $w_t$ and $v_\tau$ are correlated in time $t$, we need to decorrelate them. We can rewrite the system dynamics as
+
+\[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t + M_tR_t^{-1}(y_t - H_t x_t - v_t)\\
+= (F_t-M_tR_t^{-1}H_t)x_t + M_t R_{t}^{-1}y_t + (w_t - M_tR_t^{-1}v_t)\\
+= \tilde{F}_t x_t + \tilde{u}_t + \tilde{w}_t.\]
+
+where
+
+\[\tilde{F}_t = F_t-M_tR_t^{-1}H_t,\,\, \tilde{u}_t=M_t R_{t}^{-1}y_t,\,\,\tilde{w}_t=w - M_tR_t^{-1}v_t.\]
+
+We have
+
+\[\mathbb{E}(\tilde{w}_t v_\tau^T) = \mathbb{E}(\tilde{w}_t v_\tau^T)= \mathbb{E}((w_t - M_tR_t^{-1}v_t) v_\tau^T) \\
+= \mathbb{E}(w_t v_\tau^T) - M_tR_t^{-1}\mathbb{E}(v_t v_t^T) = M - M = 0\]
+
+and
+
+\[\tilde{Q}_t = \mathbb{E}(\tilde{w}_t \tilde{w}_t^T) = Q_t - M_t R_t^{-1} M_t^T.\]
+
+We can define the continuous-time Kalman Filter for this equivalent dynamics system. In the book, it also introduces how to tackle the non-white noise.
+
+The Steady-State Continuous-Time Kalman Filter
+
+[To Be Continue]
+" />
+    
+    <meta name="author" content="Yingru Liu" />
+
+    
+    <meta property="og:title" content="Continuous-Time Kalman Filter" />
+    <meta property="twitter:title" content="Continuous-Time Kalman Filter" />
+    
+  <!-- Async font loading -->
+<script>
+  window.WebFontConfig = {
+      custom: {
+          families: ['Spoqa Han Sans:100,300,400,700'],
+          urls: ['https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css']
+      },
+      timeout: 60000
+  };
+  (function(d) {
+      var wf = d.createElement('script'), s = d.scripts[0];
+      wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js';
+      s.parentNode.insertBefore(wf, s);
+  })(document);
+</script>
+
+<!--adobe fonts-->
+<script>
+    (function(d) {
+      var config = {
+        kitId: 'vbt3gjx',
+        scriptTimeout: 3000,
+        async: true
+      },
+      h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+    })(document);
+</script> 
+
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <link rel="alternate" type="application/rss+xml" title="Yingru Liu - A Personal Homepage" href="/feed.xml" />
+  <link rel="shortcut icon" href="/images/log.png">
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        inlineMath: [['$','$']]
+      }
+    });
+  </script>
+
+  <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+
+</head>
+
+  <body>
+    <div class="wrapper-sidebar">
+  <header class="sidebar clearfix">
+    <div class="site-info">
+      
+        <a href="/" class="site-avatar"><img src="/images/personal.jpg" /></a>
+       
+      <h1 class="site-name"><a href="/">Yingru Liu</a></h1>
+      <p class="site-description">A Personal Homepage</p>
+    </div>
+  </header>
+
+  <div class="navlist">
+    <nav>
+      
+      
+        
+          <a href="/index">Home</a>
+        
+      
+      
+      
+        
+          <a href="/blogs">Blogs</a>
+        
+      
+      
+      
+        
+          <a href="/tags">Tags</a>
+        
+      
+      
+      
+        
+          <a href="/publication">Publications</a>
+        
+      
+      
+      
+        
+        <a href="/documents/resume.pdf"target="_blank">CV</a>
+        
+      
+      
+    </nav>
+  </div>
+
+  <div class="wrapper-footer-desktop">
+    <footer class="footer">
+      <!-- Refer to https://codepen.io/ruandre/pen/howFi -->
+<ul class="svg-icon">
+
+
+  
+  <li><a href="mailto:liu2231665@hotmail.com" target="_blank" class="icon-8 email" title="Email"><svg viewBox="0 0 512 512"><path d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"/></svg><!--[if lt IE 9]><em>Email</em><![endif]--></a></li>
+  
+
+  
+
+  
+  <li><a href="https://github.com/yingrliu" target="_blank" class="icon-13 github" title="GitHub"><svg viewBox="0 0 512 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg><!--[if lt IE 9]><em>GitHub</em><![endif]--></a></li>
+  
+
+  
+
+  
+  <li><a href="https://www.linkedin.com/in/yingru-liu" target="_blank" class="icon-17 linkedin" title="LinkedIn"><svg viewBox="0 0 512 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg><!--[if lt IE 9]><em>LinkedIn</em><![endif]--></a></li>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <li><a href="https://scholar.google.com/citations?hl=en&user=dDT1fjEAAAAJ" target="_blank" class="icon-28 youtube" title="Google Scholar"><svg viewBox="0 0 512 512"><path d="M256 411.12L0 202.667 256 0z"/>
+    <path d="M256 411.12l256-208.453L256 0z" />
+    <circle cx="256" cy="362.667" r="149.333"/>
+    <path d="M121.037 298.667c23.968-50.453 75.392-85.334 134.963-85.334s110.995 34.881 134.963 85.334H121.037z" /></svg><!--[if lt IE 9]><em>Google Scholar</em><![endif]--></a></li>
+</ul>
+
+
+
+    </footer>
+  </div>
+</div>
+
+    
+      <aside class="toc">
+        <ul>
+  <li><a href="#">Continuous-Time Kalman Filter</a></li>
+  <li><a href="#discretization">Discretization</a>
+    <ul>
+      <li><a href="#discretization-for-a-full-state-space-model">Discretization for a full state-space model</a></li>
+      <li><a href="#evaluating-the-covariance-after-discretization">Evaluating the Covariance after Discretization</a></li>
+    </ul>
+  </li>
+  <li><a href="#deviation-of-continuous-time-kalman-filter">Deviation of Continuous-Time Kalman Filter</a></li>
+  <li><a href="#summary-of-continuous-time-kf">Summary of Continuous-Time KF</a></li>
+  <li><a href="#accelerated-method-for-riccati-equation">Accelerated Method for Riccati Equation</a></li>
+  <li><a href="#continuous-time-kf-for-correlated-noise">Continuous-Time KF for correlated Noise</a></li>
+  <li><a href="#the-steady-state-continuous-time-kalman-filter">The Steady-State Continuous-Time Kalman Filter</a></li>
+</ul>
+      </aside>
+    
+
+    <div id="main" role="main" class="wrapper-content">
+      <div class="container">
+        <article class="posts">
+  <h1>Continuous-Time Kalman Filter</h1>
+
+  <div clsss="meta">
+    <span class="author">
+      
+    </span>
+
+    <span class="date">
+      2021-02-24
+    </span>
+
+    <ul class="tag">
+      
+      <li>
+        <a href="/tags#Study Notes">
+          Study Notes
+        </a>
+      </li>
+      
+      <li>
+        <a href="/tags#Statistical Signal Processing">
+          Statistical Signal Processing
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+
+  <div class="entry">
+    <blockquote>
+  <p>Up till now, I dont see any detailed deviation for the Continuous-Time Kalman Filter, the content of this note is all from the Chapter 8 of the Book: <strong>Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches.</strong></p>
+</blockquote>
+
+<h1 id="discretization">Discretization</h1>
+
+<p>Recalled that for a simplified state-space model
+$\frac{d}{dt} x_t = F_t x_t + B_tu_t,\quad z_t = H_tx_t + v_t, \quad t\geq 0$,
+we have</p>
+
+\[x_t = \Phi(t, 0) x_0 + \int^t_0 \Phi(t, s)B_tu_s ds,\]
+
+<p>where <code class="language-plaintext highlighter-rouge">$\Phi(t, s)$</code> is the state transition function.
+Then by setting <code class="language-plaintext highlighter-rouge">$0$</code> to <code class="language-plaintext highlighter-rouge">$t_{k-1}$</code>, <code class="language-plaintext highlighter-rouge">$t$</code> to <code class="language-plaintext highlighter-rouge">$t_k$</code> and assuming <code class="language-plaintext highlighter-rouge">$B_t, u_t$</code> are approximately constant, we have</p>
+
+\[x_{t_k} = \Phi(t_k, t_{k-1}) x_{t_{k-1}} + \int^{t_k}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot B_{t_{k-1}}u_{t_{k-1}}.\]
+
+<p>The previous equation is exactly a discrete time state-space model:</p>
+
+\[x_k = A_{k-1}x_{k-1} + G_{k-1} u_{k-1},\]
+
+<p>where <code class="language-plaintext highlighter-rouge">$A_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$</code> and <code class="language-plaintext highlighter-rouge">$G_{k-1}=\int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot B_{t_{k-1}}$</code>.</p>
+
+<h2 id="discretization-for-a-full-state-space-model">Discretization for a full state-space model</h2>
+<p>Consider the following state-space model:</p>
+
+\[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t,\,\, w_t \sim \mathcal{N}(0, Q_t)\\
+y_t = H_t x_t + v_t,\,\, v_t \sim \mathcal{N}(0, R_t),\]
+
+<p>its discretization is given as</p>
+
+\[x_{k}= A_{k-1}x_{k-1} + B_{k-1}u_{k-1} + w_{k-1},\\
+w_{k-1} = \Lambda_{k-1}w_{(k-1)\Delta t}\\
+y_{k}=C_{k}x_{k} + v_{k},\]
+
+<p>where</p>
+
+\[A_{k-1} = \Phi(t_{k-1}+\Delta t, t_{k-1}),\\
+B_{k-1} = \int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot G_{t_{k-1}}\approx \Delta t I G_{t_{k-1}},\\
+\Lambda_{k-1}=\int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\approx \Delta t I,\\
+C_k = H_{(k-1)\Delta t},\\
+w_{k-1} \sim \mathcal{N}(0, Q_{(k-1)\Delta t}\Delta t),\\
+v_{k-1} \sim \mathcal{N}(0, \frac{R_{(k-1)\Delta t}}{\Delta t}).\]
+
+<p>For simplicity, we define the notation <code class="language-plaintext highlighter-rouge">$Q_{k-1}=Q_{(k-1)\Delta t}\Delta t$</code>,  <code class="language-plaintext highlighter-rouge">$R_{k-1}=\frac{R_{(k-1)\Delta t}}{\Delta t}$</code> and <code class="language-plaintext highlighter-rouge">$\Phi_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$</code>.</p>
+
+<h2 id="evaluating-the-covariance-after-discretization">Evaluating the Covariance after Discretization</h2>
+<p>By the previous step, we can discretize the differential equation into an discrete difference equation. However, the covariances of white noise <code class="language-plaintext highlighter-rouge">$w_t$</code> and <code class="language-plaintext highlighter-rouge">$w_t$</code> should be carefully evaluated, so that the stochasititicy is identical.</p>
+
+<p><strong>(i).</strong> The discretization of <code class="language-plaintext highlighter-rouge">$w_t$</code> and <code class="language-plaintext highlighter-rouge">$w_t$</code> is a little bit tricky (at leat in my opinion). In the book, If we discretize the state-space model, we can define a discrete-time Kalman Filter and the error of this book should be independent with <code class="language-plaintext highlighter-rouge">$\Delta t$</code>. To my understanding, we are discretizing the rectangle volume <code class="language-plaintext highlighter-rouge">$\int_0^{\Delta t}R_{\tau}d\tau$</code> in the curve of <code class="language-plaintext highlighter-rouge">$Q_t$</code> into a point value, to assure that the <code class="language-plaintext highlighter-rouge">$\Delta t \times R$</code> is equal to the integral, we set <code class="language-plaintext highlighter-rouge">$v_{t_{k-1}}\sim \mathcal{N}(0, R_{t_{k-1}}/\Delta t)$</code>. Similarly, we set
+<code class="language-plaintext highlighter-rouge">$w_{t_{k-1}}\sim \mathcal{N}(0, Q_{t_{k-1}}/\Delta t)$</code>.</p>
+
+<p><strong>(i).</strong> We replace <code class="language-plaintext highlighter-rouge">$w_t$</code> by <code class="language-plaintext highlighter-rouge">$\Lambda_{k-1}w_{t_{k-1}}$</code>. As <code class="language-plaintext highlighter-rouge">$\Lambda_{k-1}\approx \Delta t I$</code> and <code class="language-plaintext highlighter-rouge">$w_{t_{k-1}}\sim \mathcal{N}(0, Q_{t_{k-1}}/\Delta t)$</code>, <code class="language-plaintext highlighter-rouge">$w_{k-1}\sim \mathcal{N}(0, \Delta t Q_{t_{k-1}})$</code>.</p>
+
+<h1 id="deviation-of-continuous-time-kalman-filter">Deviation of Continuous-Time Kalman Filter</h1>
+<p>After the discretization, we can define a discrete-time Kalman Filter whose <code class="language-plaintext highlighter-rouge">$K_n$</code> is denoted as</p>
+
+\[K_k = P_k^fC_k^TD_k^{-1}=P_k^fC_k^T(C_k P_k^f C_k^T + R_k)^{-1}\\
+= P_k^f H_{k-1}^T(H_{k-1} P_k^fH_{k-1}^T + R_{k-1}/\Delta t)^{-1},\]
+
+<p>and therefore,</p>
+
+\[\lim_{\Delta t\rightarrow 0} \frac{K_k}{\Delta t} = \lim_{\Delta t\rightarrow 0} P_k^f H_{k-1}^T(\Delta t H_{k-1} P_k^fH_{k-1}^T + R_{k-1})^{-1} \\
+= P_k^f H_{k-1}^T(R_{k-1})^{-1}.\]
+
+<p>We also have
+\(P_k = (I - K_k C_k)P_k^f,\\
+P_k^f = A_{k-1}P_{k-1}A_{k-1}^T + Q_{k-1}.\)</p>
+
+<p>Substituting <code class="language-plaintext highlighter-rouge">$A_{k-1}$</code> into it, we have</p>
+
+\[P_{k}^f = \Phi_{k-1}P_{k-1}P_{k-1}^f\Phi_{k-1}^T + Q_{k-1}\Delta t\\\]
+
+<p>By the property of STM, we further have</p>
+
+\[P_{k}^f = (I + \Delta tF_{k-1}\Phi_{k-1})P_{k-1}(I + \Delta tF_{k-1}\Phi_{k-1})^T + Q_{k-1}\Delta t\\
+= P_{k-1} + \Delta tF_{k-1}\Phi_{k-1}P_{k-1} + \Delta t P_{k-1}\Phi_{k-1}^TF_{k-1}^T\\ + (\Delta t)^2F_{k-1}\Phi_{k-1}P_{k-1}\Phi_{k-1}^TF_{k-1}^T + Q_{k-1}\Delta t,\]
+
+<p>Substituting <code class="language-plaintext highlighter-rouge">$P_{k-1}^f$</code> into it, we have</p>
+
+\[P_{k}^f = (I - K_{k-1} C_{k-1})P_{k-1}^f + \Delta tF_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f \\
++ \Delta t (I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\
++ (\Delta t)^2F_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\
++ Q_{(k-1)\Delta t}\Delta t,\]
+
+<p>and</p>
+
+\[\frac{P_{k}^f-P_{k-1}^f}{\Delta t} = -\frac{- K_{k-1} C_{k-1}P_{k-1}^f}{\Delta t} + F_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\\
++ (I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\
++ \Delta tF_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T.\]
+
+<p>Taking the limitation yields:</p>
+
+\[\lim_{\Delta t\rightarrow 0} \frac{P_{k}^f-P_{k-1}^f}{\Delta t} =-P_k^f H_{k-1}^TR_{k-1}^{-1}H_{k-1}^TP_{k-1}^f\\
++ F_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f + (I - K_{k-1} C_{k-1})P_{k-1}^fF_{k-1}^T + Q_{k-1}\\
+=\lim_{\Delta t\rightarrow 0} -P_k^f H_{k-1}^TR_{k-1}^{-1}H_{k-1}^TP_{k-1}^f + F_{k-1}P_{k-1}^f + P_{k-1}^fF_{k-1}^T\\
+- F_{k-1}K_{k-1} C_{k-1}P_{k-1}^f - K_{k-1} C_{k-1}P_{k-1}^fF_{k-1}^T + Q_{k-1}\\\]
+
+<p>Recall that there is a <code class="language-plaintext highlighter-rouge">$\Delta t$</code> in computing <code class="language-plaintext highlighter-rouge">$K_{k-1}$</code>, which leads to <code class="language-plaintext highlighter-rouge">$\lim_{\Delta t\rightarrow 0}F_{k-1}K_{k-1} C_{k-1}P_{k-1}^f=0$</code> and <code class="language-plaintext highlighter-rouge">$\lim_{\Delta t\rightarrow 0}K_{k-1} C_{k-1}P_{k-1}^fF_{k-1}^T=0$</code>, we have</p>
+
+\[\frac{d}{dt}P_t=-P_t H_t^TR_t^{-1}H_t^TP_t + F_tP_t + P_t F_t^T + Q_t,\]
+
+<p>where <code class="language-plaintext highlighter-rouge">$P_t$</code> is the continuous counterpart of prior covariance <code class="language-plaintext highlighter-rouge">$P_k^f$</code> (not the posterior one). This equation is also an instance of the Differential Riccati Equation.</p>
+
+<p>For the estimate <code class="language-plaintext highlighter-rouge">$x_k^a$</code>, when <code class="language-plaintext highlighter-rouge">$\Delta t\rightarrow 0$</code>, we also have</p>
+
+\[x_k^a = A_{k-1}x_{k-1}^a + B_{k-1} u_{k-1} + K_k(z_k - C_kA_{k-1}x_{k-1}^a - C_kB_{k-1} u_{k-1})\\
+=(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a + B_{k-1} u_{k-1} + K_k(z_k - C_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a - C_kB_{k-1} u_{k-1})\\
+= x_{k-1}^a + \Delta tF_{k-1}\Phi_{k-1}x_{k-1}^a + B_{k-1} u_{k-1} + K_kz_k-K_kC_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a\\
+-K_k C_kB_{k-1} u_{k-1},\\
+= x_{k-1}^a + \Delta tF_{k-1}\Phi_{k-1}x_{k-1}^a + \Delta t G_{k-1} u_{k-1} + \Delta tP_k^f H_{k-1}^T(R_{k-1})^{-1}z_k\\
+-\Delta tP_k^f H_{k-1}^T(R_{k-1})^{-1}H_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a\\
+-\Delta t P_k^f H_{k-1}^T(R_{k-1})^{-1} H_kB_{k-1} u_{k-1}.\]
+
+<p>Hence, we have</p>
+
+\[\lim_{\Delta t\rightarrow 0}\frac{x_k^a - x_{k-1}^a}{\Delta t} = F_{k-1}x_{k-1}^a+ G_{k-1}u_{k-1} + P_k^f H_{k-1}^T(R_{k-1})^{-1}(z_k-H_kx_{k-1}^a).\]
+
+<p>That is</p>
+
+\[\frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + P_k H_t^TR_t^{-1}(Z-H_t\hat{x}_t).\]
+
+<h1 id="summary-of-continuous-time-kf">Summary of Continuous-Time KF</h1>
+
+\[\frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + K_t(Z-H_t\hat{x}_t),\\
+\frac{d}{dt}P_t=-P_t H_t^TR_t^{-1}H_t^TP_t + F_tP_t + P_t F_t^T + Q_t,\\
+K_t = P_k H_t^TR_t^{-1}.\]
+
+<h1 id="accelerated-method-for-riccati-equation">Accelerated Method for Riccati Equation</h1>
+<blockquote>
+  <p>The ODE of estimate covariance <code class="language-plaintext highlighter-rouge">$P$</code> is a Differential Riccati Equation, which is computationally costly. To acclerate the algorithm, several algorithms have been proposed, including <em>Transition Matrix Approach</em> and <em>Chandrasekhar Algorithm</em>. Details can be found in the Chapter 8.3 in the Book: <strong>Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches.</strong></p>
+</blockquote>
+
+<h1 id="continuous-time-kf-for-correlated-noise">Continuous-Time KF for correlated Noise</h1>
+<p>Consider the following continuous-time system:</p>
+
+\[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t,\,\, w_t \sim \mathcal{N}(0, Q_t)\\
+y_t = H_t x_t + v_t,\,\, v_t \sim \mathcal{N}(0, R_t),\\
+\mathbb{E}(w_t v_\tau^T) = M_t\delta(t-\tau).\]
+
+<p>As <code class="language-plaintext highlighter-rouge">$w_t$</code> and <code class="language-plaintext highlighter-rouge">$v_\tau$</code> are correlated in time <code class="language-plaintext highlighter-rouge">$t$</code>, we need to decorrelate them. We can rewrite the system dynamics as</p>
+
+\[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t + M_tR_t^{-1}(y_t - H_t x_t - v_t)\\
+= (F_t-M_tR_t^{-1}H_t)x_t + M_t R_{t}^{-1}y_t + (w_t - M_tR_t^{-1}v_t)\\
+= \tilde{F}_t x_t + \tilde{u}_t + \tilde{w}_t.\]
+
+<p>where</p>
+
+\[\tilde{F}_t = F_t-M_tR_t^{-1}H_t,\,\, \tilde{u}_t=M_t R_{t}^{-1}y_t,\,\,\tilde{w}_t=w - M_tR_t^{-1}v_t.\]
+
+<p>We have</p>
+
+\[\mathbb{E}(\tilde{w}_t v_\tau^T) = \mathbb{E}(\tilde{w}_t v_\tau^T)= \mathbb{E}((w_t - M_tR_t^{-1}v_t) v_\tau^T) \\
+= \mathbb{E}(w_t v_\tau^T) - M_tR_t^{-1}\mathbb{E}(v_t v_t^T) = M - M = 0\]
+
+<p>and</p>
+
+\[\tilde{Q}_t = \mathbb{E}(\tilde{w}_t \tilde{w}_t^T) = Q_t - M_t R_t^{-1} M_t^T.\]
+
+<p>We can define the continuous-time Kalman Filter for this equivalent dynamics system. In the book, it also introduces how to tackle the non-white noise.</p>
+
+<h1 id="the-steady-state-continuous-time-kalman-filter">The Steady-State Continuous-Time Kalman Filter</h1>
+
+<p>[To Be Continue]</p>
+
+  </div>
+
+  
+  
+<script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="issue-term"
+        label="utteranc"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  
+<div class="comments">
+    <div id="gitalk-container"></div>
+    <script>
+        const gitalk = new Gitalk({
+          clientID: "d85485b0f88307643a90",
+          clientSecret: "8bb87be3ff47931b03fc91a7118fc7482ced3c2a",
+          repo: "yingrliu.github.io",
+          owner: "yingrliu",
+          admin: ["yingrliu"],
+          id: window.location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false,  // Facebook-like distraction free mode
+          title: "Continuous-Time Kalman Filter",
+          language: "en-US",
+
+        })
+        
+        gitalk.render('gitalk-container')
+    </script>
+</div>
+
+</article>
+
+<div class="pagination">
+  
+  
+</div>
+      </div>
+    </div>
+
+    
+
+  </body>
+
+  
+  <script>
+    document.getElementById("main").classList.add("withtoc");
+  </script>
+  
+
+  <div class="wrapper-footer-mobile">
+    <footer class="footer">
+      <!-- Refer to https://codepen.io/ruandre/pen/howFi -->
+<ul class="svg-icon">
+
+
+  
+  <li><a href="mailto:liu2231665@hotmail.com" target="_blank" class="icon-8 email" title="Email"><svg viewBox="0 0 512 512"><path d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"/></svg><!--[if lt IE 9]><em>Email</em><![endif]--></a></li>
+  
+
+  
+
+  
+  <li><a href="https://github.com/yingrliu" target="_blank" class="icon-13 github" title="GitHub"><svg viewBox="0 0 512 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg><!--[if lt IE 9]><em>GitHub</em><![endif]--></a></li>
+  
+
+  
+
+  
+  <li><a href="https://www.linkedin.com/in/yingru-liu" target="_blank" class="icon-17 linkedin" title="LinkedIn"><svg viewBox="0 0 512 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg><!--[if lt IE 9]><em>LinkedIn</em><![endif]--></a></li>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <li><a href="https://scholar.google.com/citations?hl=en&user=dDT1fjEAAAAJ" target="_blank" class="icon-28 youtube" title="Google Scholar"><svg viewBox="0 0 512 512"><path d="M256 411.12L0 202.667 256 0z"/>
+    <path d="M256 411.12l256-208.453L256 0z" />
+    <circle cx="256" cy="362.667" r="149.333"/>
+    <path d="M121.037 298.667c23.968-50.453 75.392-85.334 134.963-85.334s110.995 34.881 134.963 85.334H121.037z" /></svg><!--[if lt IE 9]><em>Google Scholar</em><![endif]--></a></li>
+</ul>
+
+
+
+    </footer>
+
+
+</html>
