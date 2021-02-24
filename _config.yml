@@ -41,7 +41,7 @@ navigation:
   - name: Publications
     url: /publication
   - name: CV
-    url: /documents/Resume.pdf
+    url: https://yingrliu.github.io/documents/resume.pdf
 
 # 每页的文章数
 paginate: 8
