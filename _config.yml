@@ -82,7 +82,7 @@ footer-links:
 gitalk:
   clientID: d85485b0f88307643a90
   clientSecret: 8bb87be3ff47931b03fc91a7118fc7482ced3c2a
-  repo: https://github.com/yingrliu/yingrliu.github.io
+  repo: yingrliu.github.io
   owner: yingrliu
   admin: yingrliu
 
