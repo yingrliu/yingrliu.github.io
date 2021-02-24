@@ -82,8 +82,8 @@ footer-links:
 gitalk:
   clientID: d85485b0f88307643a90
   clientSecret: ad9d4d1087cede6ba644654a82332775e298094b
-  repo: 
-  owner: 
+  repo: yingrliu.github.io
+  owner: yingrliu
 
 # 输入Google Analytics web tracking code
 google_analytics:
