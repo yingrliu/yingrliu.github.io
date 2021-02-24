@@ -76,12 +76,12 @@ footer-links:
 #
 
 # 输入Disqus shortname，即可添加评论区，请查阅文档，设置自己的disqus站点，不要继续使用我的站点loffer
-disqus: yingruliu #shortname
+# disqus: #shortname
 
 # 输入Gitalk相关设定，即可添加评论区，具体请看教程
 gitalk:
-  clientID: 
-  clientSecret: 
+  clientID: d85485b0f88307643a90
+  clientSecret: ad9d4d1087cede6ba644654a82332775e298094b
   repo: 
   owner: 
 
