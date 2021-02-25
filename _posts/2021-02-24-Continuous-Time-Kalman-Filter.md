@@ -10,7 +10,7 @@ toc: true
 
 > Up till now, I dont see any detailed deviation for the Continuous-Time Kalman Filter, the content of this note is all from the Chapter 8 of the Book: **Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches.**
 
-# Discretization
+## Discretization
 
 Recalled that for a simplified state-space model
 $\frac{d}{dt} x_t = F_t x_t + B_tu_t,\quad z_t = H_tx_t + v_t, \quad t\geq 0$,
@@ -36,7 +36,7 @@ $$
 
 where `$A_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$` and `$G_{k-1}=\int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot B_{t_{k-1}}$`.
 
-## Discretization for a full state-space model
+### Discretization for a full state-space model
 Consider the following state-space model:
 
 $$
@@ -65,7 +65,7 @@ $$
 
 For simplicity, we define the notation `$Q_{k-1}=Q_{(k-1)\Delta t}\Delta t$`,  `$R_{k-1}=\frac{R_{(k-1)\Delta t}}{\Delta t}$` and `$\Phi_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$`.
 
-## Evaluating the Covariance after Discretization
+### Evaluating the Covariance after Discretization
 By the previous step, we can discretize the differential equation into an discrete difference equation. However, the covariances of white noise `$w_t$` and `$w_t$` should be carefully evaluated, so that the stochasititicy is identical.
 
 **(i).** The discretization of `$w_t$` and `$w_t$` is a little bit tricky (at leat in my opinion). In the book, If we discretize the state-space model, we can define a discrete-time Kalman Filter and the error of this book should be independent with `$\Delta t$`. To my understanding, we are discretizing the rectangle volume `$\int_0^{\Delta t}R_{\tau}d\tau$` in the curve of `$Q_t$` into a point value, to assure that the `$\Delta t \times R$` is equal to the integral, we set `$v_{t_{k-1}}\sim \mathcal{N}(0, R_{t_{k-1}}/\Delta t)$`. Similarly, we set
@@ -75,7 +75,7 @@ By the previous step, we can discretize the differential equation into an discre
 
 
 
-# Deviation of Continuous-Time Kalman Filter
+### Deviation of Continuous-Time Kalman Filter
 After the discretization, we can define a discrete-time Kalman Filter whose `$K_n$` is denoted as
 
 $$
@@ -168,7 +168,7 @@ $$
 \frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + P_k H_t^TR_t^{-1}(Z-H_t\hat{x}_t).
 $$
 
-# Summary of Continuous-Time KF
+## Summary of Continuous-Time KF
 
 $$
 \frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + K_t(Z-H_t\hat{x}_t),\\
@@ -176,10 +176,10 @@ $$
 K_t = P_k H_t^TR_t^{-1}.
 $$
 
-# Accelerated Method for Riccati Equation
+## Accelerated Method for Riccati Equation
 > The ODE of estimate covariance `$P$` is a Differential Riccati Equation, which is computationally costly. To acclerate the algorithm, several algorithms have been proposed, including *Transition Matrix Approach* and *Chandrasekhar Algorithm*. Details can be found in the Chapter 8.3 in the Book: **Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches.**
 
-# Continuous-Time KF for correlated Noise
+## Continuous-Time KF for correlated Noise
 Consider the following continuous-time system:
 
 $$
@@ -217,6 +217,6 @@ $$
 
 We can define the continuous-time Kalman Filter for this equivalent dynamics system. In the book, it also introduces how to tackle the non-white noise.
 
-# The Steady-State Continuous-Time Kalman Filter
+## The Steady-State Continuous-Time Kalman Filter
 
 \[To Be Continue\]

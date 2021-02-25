@@ -495,18 +495,21 @@ The Steady-State Continuous-Time Kalman Filter
     
       <aside class="toc">
         <ul>
-  <li><a href="#">Continuous-Time Kalman Filter</a></li>
-  <li><a href="#discretization">Discretization</a>
+  <li><a href="#">Continuous-Time Kalman Filter</a>
     <ul>
-      <li><a href="#discretization-for-a-full-state-space-model">Discretization for a full state-space model</a></li>
-      <li><a href="#evaluating-the-covariance-after-discretization">Evaluating the Covariance after Discretization</a></li>
+      <li><a href="#discretization">Discretization</a>
+        <ul>
+          <li><a href="#discretization-for-a-full-state-space-model">Discretization for a full state-space model</a></li>
+          <li><a href="#evaluating-the-covariance-after-discretization">Evaluating the Covariance after Discretization</a></li>
+          <li><a href="#deviation-of-continuous-time-kalman-filter">Deviation of Continuous-Time Kalman Filter</a></li>
+        </ul>
+      </li>
+      <li><a href="#summary-of-continuous-time-kf">Summary of Continuous-Time KF</a></li>
+      <li><a href="#accelerated-method-for-riccati-equation">Accelerated Method for Riccati Equation</a></li>
+      <li><a href="#continuous-time-kf-for-correlated-noise">Continuous-Time KF for correlated Noise</a></li>
+      <li><a href="#the-steady-state-continuous-time-kalman-filter">The Steady-State Continuous-Time Kalman Filter</a></li>
     </ul>
   </li>
-  <li><a href="#deviation-of-continuous-time-kalman-filter">Deviation of Continuous-Time Kalman Filter</a></li>
-  <li><a href="#summary-of-continuous-time-kf">Summary of Continuous-Time KF</a></li>
-  <li><a href="#accelerated-method-for-riccati-equation">Accelerated Method for Riccati Equation</a></li>
-  <li><a href="#continuous-time-kf-for-correlated-noise">Continuous-Time KF for correlated Noise</a></li>
-  <li><a href="#the-steady-state-continuous-time-kalman-filter">The Steady-State Continuous-Time Kalman Filter</a></li>
 </ul>
       </aside>
     
@@ -547,7 +550,7 @@ The Steady-State Continuous-Time Kalman Filter
   <p>Up till now, I dont see any detailed deviation for the Continuous-Time Kalman Filter, the content of this note is all from the Chapter 8 of the Book: <strong>Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches.</strong></p>
 </blockquote>
 
-<h1 id="discretization">Discretization</h1>
+<h2 id="discretization">Discretization</h2>
 
 <p>Recalled that for a simplified state-space model
 $\frac{d}{dt} x_t = F_t x_t + B_tu_t,\quad z_t = H_tx_t + v_t, \quad t\geq 0$,
@@ -566,7 +569,7 @@ Then by setting <code class="language-plaintext highlighter-rouge">$0$</code> to
 
 <p>where <code class="language-plaintext highlighter-rouge">$A_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$</code> and <code class="language-plaintext highlighter-rouge">$G_{k-1}=\int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot B_{t_{k-1}}$</code>.</p>
 
-<h2 id="discretization-for-a-full-state-space-model">Discretization for a full state-space model</h2>
+<h3 id="discretization-for-a-full-state-space-model">Discretization for a full state-space model</h3>
 <p>Consider the following state-space model:</p>
 
 \[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t,\,\, w_t \sim \mathcal{N}(0, Q_t)\\
@@ -589,7 +592,7 @@ v_{k-1} \sim \mathcal{N}(0, \frac{R_{(k-1)\Delta t}}{\Delta t}).\]
 
 <p>For simplicity, we define the notation <code class="language-plaintext highlighter-rouge">$Q_{k-1}=Q_{(k-1)\Delta t}\Delta t$</code>,  <code class="language-plaintext highlighter-rouge">$R_{k-1}=\frac{R_{(k-1)\Delta t}}{\Delta t}$</code> and <code class="language-plaintext highlighter-rouge">$\Phi_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$</code>.</p>
 
-<h2 id="evaluating-the-covariance-after-discretization">Evaluating the Covariance after Discretization</h2>
+<h3 id="evaluating-the-covariance-after-discretization">Evaluating the Covariance after Discretization</h3>
 <p>By the previous step, we can discretize the differential equation into an discrete difference equation. However, the covariances of white noise <code class="language-plaintext highlighter-rouge">$w_t$</code> and <code class="language-plaintext highlighter-rouge">$w_t$</code> should be carefully evaluated, so that the stochasititicy is identical.</p>
 
 <p><strong>(i).</strong> The discretization of <code class="language-plaintext highlighter-rouge">$w_t$</code> and <code class="language-plaintext highlighter-rouge">$w_t$</code> is a little bit tricky (at leat in my opinion). In the book, If we discretize the state-space model, we can define a discrete-time Kalman Filter and the error of this book should be independent with <code class="language-plaintext highlighter-rouge">$\Delta t$</code>. To my understanding, we are discretizing the rectangle volume <code class="language-plaintext highlighter-rouge">$\int_0^{\Delta t}R_{\tau}d\tau$</code> in the curve of <code class="language-plaintext highlighter-rouge">$Q_t$</code> into a point value, to assure that the <code class="language-plaintext highlighter-rouge">$\Delta t \times R$</code> is equal to the integral, we set <code class="language-plaintext highlighter-rouge">$v_{t_{k-1}}\sim \mathcal{N}(0, R_{t_{k-1}}/\Delta t)$</code>. Similarly, we set
@@ -597,7 +600,7 @@ v_{k-1} \sim \mathcal{N}(0, \frac{R_{(k-1)\Delta t}}{\Delta t}).\]
 
 <p><strong>(i).</strong> We replace <code class="language-plaintext highlighter-rouge">$w_t$</code> by <code class="language-plaintext highlighter-rouge">$\Lambda_{k-1}w_{t_{k-1}}$</code>. As <code class="language-plaintext highlighter-rouge">$\Lambda_{k-1}\approx \Delta t I$</code> and <code class="language-plaintext highlighter-rouge">$w_{t_{k-1}}\sim \mathcal{N}(0, Q_{t_{k-1}}/\Delta t)$</code>, <code class="language-plaintext highlighter-rouge">$w_{k-1}\sim \mathcal{N}(0, \Delta t Q_{t_{k-1}})$</code>.</p>
 
-<h1 id="deviation-of-continuous-time-kalman-filter">Deviation of Continuous-Time Kalman Filter</h1>
+<h3 id="deviation-of-continuous-time-kalman-filter">Deviation of Continuous-Time Kalman Filter</h3>
 <p>After the discretization, we can define a discrete-time Kalman Filter whose <code class="language-plaintext highlighter-rouge">$K_n$</code> is denoted as</p>
 
 \[K_k = P_k^fC_k^TD_k^{-1}=P_k^fC_k^T(C_k P_k^f C_k^T + R_k)^{-1}\\
@@ -666,18 +669,18 @@ P_k^f = A_{k-1}P_{k-1}A_{k-1}^T + Q_{k-1}.\]
 
 \[\frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + P_k H_t^TR_t^{-1}(Z-H_t\hat{x}_t).\]
 
-<h1 id="summary-of-continuous-time-kf">Summary of Continuous-Time KF</h1>
+<h2 id="summary-of-continuous-time-kf">Summary of Continuous-Time KF</h2>
 
 \[\frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + K_t(Z-H_t\hat{x}_t),\\
 \frac{d}{dt}P_t=-P_t H_t^TR_t^{-1}H_t^TP_t + F_tP_t + P_t F_t^T + Q_t,\\
 K_t = P_k H_t^TR_t^{-1}.\]
 
-<h1 id="accelerated-method-for-riccati-equation">Accelerated Method for Riccati Equation</h1>
+<h2 id="accelerated-method-for-riccati-equation">Accelerated Method for Riccati Equation</h2>
 <blockquote>
   <p>The ODE of estimate covariance <code class="language-plaintext highlighter-rouge">$P$</code> is a Differential Riccati Equation, which is computationally costly. To acclerate the algorithm, several algorithms have been proposed, including <em>Transition Matrix Approach</em> and <em>Chandrasekhar Algorithm</em>. Details can be found in the Chapter 8.3 in the Book: <strong>Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches.</strong></p>
 </blockquote>
 
-<h1 id="continuous-time-kf-for-correlated-noise">Continuous-Time KF for correlated Noise</h1>
+<h2 id="continuous-time-kf-for-correlated-noise">Continuous-Time KF for correlated Noise</h2>
 <p>Consider the following continuous-time system:</p>
 
 \[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t,\,\, w_t \sim \mathcal{N}(0, Q_t)\\
@@ -705,7 +708,7 @@ y_t = H_t x_t + v_t,\,\, v_t \sim \mathcal{N}(0, R_t),\\
 
 <p>We can define the continuous-time Kalman Filter for this equivalent dynamics system. In the book, it also introduces how to tackle the non-white noise.</p>
 
-<h1 id="the-steady-state-continuous-time-kalman-filter">The Steady-State Continuous-Time Kalman Filter</h1>
+<h2 id="the-steady-state-continuous-time-kalman-filter">The Steady-State Continuous-Time Kalman Filter</h2>
 
 <p>[To Be Continue]</p>
 
