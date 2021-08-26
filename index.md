@@ -17,11 +17,11 @@ I have a broad range of interest and curiosity in research. Learning brings me a
 # News
 <table>
   <tr>
-    <td><b>[May. 2021]</b></td>
+    <td><b>05/2021</b></td>
     <td>Received PhD degree from Stony Brook University!</td>
   </tr>
   <tr>
-    <td><b><b>[Feb. 2020]</b></b></td>
+    <td><b><b>02/2020</b></b></td>
     <td>One paper accepted by <b>AAAI-20</b>!</td>
   </tr>
 </table>
