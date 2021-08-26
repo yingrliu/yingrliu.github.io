@@ -5,7 +5,7 @@ layout: default
 
 # About Me
 
-I am currently a Research Scientist in Facebook Reality Lab (FRL) - CTRL Team [[link]](https://tech.fb.com/inside-facebook-reality-labs-wrist-based-interaction-for-the-next-computing-platform/).
+I am currently a Research Scientist in Facebook Reality Lab (FRL) - CTRL Team <a href="https://tech.fb.com/inside-facebook-reality-labs-wrist-based-interaction-for-the-next-computing-platform/" target="_blank">[link]</a>.
 Prior to Facebook, I earned Phd on Computer Engineering in Stony Brook Univeristy (SBU).
 I concentrates on designing reusable deep generative models for capturing the stochasticity and
 dynamics of time series. Before that, I received Bachelor degree of Automation Control from
