@@ -11,7 +11,7 @@ I concentrates on designing reusable deep generative models for capturing the st
 dynamics of time series. Before that, I received Bachelor degree of Automation Control from
 University of Electronic Science and Technology of China (UESTC).
 
-I have a broad range of interest and curiosity in research. Learning brings me a lot of happiness in both academics and life. If you think we could learn from each other, feel free to reach out~~~😆😆😆
+I have a broad range of interest and curiosity. Learning brings me a lot of happiness in both academics and life. If you think we could learn from each other, feel free to reach out~~~😆😆😆
 
 
 # News
