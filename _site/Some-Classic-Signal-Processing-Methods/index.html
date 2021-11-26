@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <title>Yingru Liu – A Personal Homepage</title>
+  <title>Some classic and useful signal processing methods – Yingru Liu – A Personal Homepage</title>
 
       <meta charset="utf-8" />
     <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
@@ -9,11 +9,20 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
 
     
-    <meta name="description" content="A Personal Homepage">
-    <meta property="og:description" content="A Personal Homepage" />
+    <meta name="description" content="Minimum-Variance Distortionless Response (MVDR)
+
+Recursive Least Square Filter (RLS)
+" />
+    <meta property="og:description" content="Minimum-Variance Distortionless Response (MVDR)
+
+Recursive Least Square Filter (RLS)
+" />
     
     <meta name="author" content="Yingru Liu" />
 
+    
+    <meta property="og:title" content="Some classic and useful signal processing methods" />
+    <meta property="twitter:title" content="Some classic and useful signal processing methods" />
     
   <!-- Async font loading -->
 <script>
@@ -160,36 +169,101 @@
 </div>
 
     
+      <aside class="toc">
+        <ul>
+  <li><a href="#">Some classic and useful signal processing methods</a>
+    <ul>
+      <li><a href="#minimum-variance-distortionless-response-mvdr">Minimum-Variance Distortionless Response (MVDR)</a></li>
+      <li><a href="#recursive-least-square-filter-rls">Recursive Least Square Filter (RLS)</a></li>
+    </ul>
+  </li>
+</ul>
+      </aside>
+    
 
     <div id="main" role="main" class="wrapper-content">
       <div class="container">
-        <h1 id="about-me">About Me</h1>
+        <article class="posts">
+  <h1>Some classic and useful signal processing methods</h1>
 
-<p>I am currently a Research Scientist in Facebook Reality Lab (FRL) - CTRL Team <a href="https://tech.fb.com/inside-facebook-reality-labs-wrist-based-interaction-for-the-next-computing-platform/" target="_blank">[link]</a>.
-Prior to Facebook, I earned Phd on Computer Engineering in Stony Brook Univeristy (SBU).
-I concentrates on designing reusable deep generative models for capturing the stochasticity and
-dynamics of time series. Before that, I received Bachelor degree of Automation Control from
-University of Electronic Science and Technology of China (UESTC).</p>
+  <div clsss="meta">
+    <span class="author">
+      
+    </span>
 
-<p>I have a broad range of interest and curiosity. Learning brings me a lot of happiness in both academics and life. If you think we could learn from each other, feel free to reach out~~~😆😆😆</p>
+    <span class="date">
+      2021-08-30
+    </span>
 
-<h1 id="news">News</h1>
+    <ul class="tag">
+      
+      <li>
+        <a href="http://localhost:4000/tags#Study Notes">
+          Study Notes
+        </a>
+      </li>
+      
+      <li>
+        <a href="http://localhost:4000/tags#beamforming">
+          beamforming
+        </a>
+      </li>
+      
+    </ul>
+  </div>
 
-<table>
-  <tr>
-    <td><b>09/2021</b></td>
-    <td>One paper during PhD program accepted by <b>ICONIP-2021</b>.</td>
-  </tr>
-  <tr>
-    <td><b>05/2021</b></td>
-    <td>Received PhD degree from Stony Brook University.</td>
-  </tr>
-  <tr>
-    <td><b><b>02/2020</b></b></td>
-    <td>One paper accepted by <b>AAAI-20</b>.</td>
-  </tr>
-</table>
+  <div class="entry">
+    <h2 id="minimum-variance-distortionless-response-mvdr">Minimum-Variance Distortionless Response (MVDR)</h2>
 
+<h2 id="recursive-least-square-filter-rls">Recursive Least Square Filter (RLS)</h2>
+
+  </div>
+
+  
+  
+<script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="issue-term"
+        label="utteranc"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  
+<div class="comments">
+    <div id="gitalk-container"></div>
+    <script>
+        const gitalk = new Gitalk({
+          clientID: "d85485b0f88307643a90",
+          clientSecret: "8bb87be3ff47931b03fc91a7118fc7482ced3c2a",
+          repo: "yingrliu.github.io",
+          owner: "yingrliu",
+          admin: ["yingrliu"],
+          id: window.location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false,  // Facebook-like distraction free mode
+          title: "Some classic and useful signal processing methods",
+          language: "en-US",
+
+        })
+        
+        gitalk.render('gitalk-container')
+    </script>
+</div>
+
+</article>
+
+<div class="pagination">
+  
+    <span class="prev" >
+      <a href="http://localhost:4000/Continuous-Time-Kalman-Filter/">
+        ← Previous
+      </a>
+    </span>
+  
+  
+</div>
       </div>
     </div>
 
@@ -197,6 +271,10 @@ University of Electronic Science and Technology of China (UESTC).</p>
 
   </body>
 
+  
+  <script>
+    document.getElementById("main").classList.add("withtoc");
+  </script>
   
 
   <div class="wrapper-footer-mobile">
