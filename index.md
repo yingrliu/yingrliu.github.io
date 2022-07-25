@@ -16,6 +16,10 @@ I have a broad range of interest and curiosity. Learning brings me a lot of happ
 
 <table>
   <tr>
+    <td><b>07/2021</b></td>
+    <td>One collaborative paper during PhD program accepted by <b>ACM Multimedia 2022</b>.</td>
+  </tr>
+  <tr>
     <td><b>09/2021</b></td>
     <td>One paper during PhD program accepted by <b>ICONIP-2021</b>.</td>
   </tr>
