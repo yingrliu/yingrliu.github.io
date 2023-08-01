@@ -5,19 +5,21 @@ layout: default
 # About Me
 
 I am currently a Research Scientist in Facebook Reality Lab (FRL) - CTRL Team <a href="https://tech.fb.com/inside-facebook-reality-labs-wrist-based-interaction-for-the-next-computing-platform/" target="_blank">[link]</a>.
-Prior to Facebook, I earned Phd on Computer Engineering in Stony Brook Univeristy (SBU).
-I concentrates on designing reusable deep generative models for capturing the stochasticity and
+In FRL, I am working on studying advanced machine learning models to create user-friendly neural-motor interface.
+Prior to Facebook, I earned Phd on Computer Engineering in Stony Brook Univeristy (SBU),
+where I concentrated on designing reusable deep generative models for capturing the stochasticity and
 dynamics of time series. Before that, I received Bachelor degree of Automation Control from
-University of Electronic Science and Technology of China (UESTC).
+University of Electronic Science and Technology of China (UESTC) with solid background on robust adaptive control.
 
-I have a broad range of interest and curiosity. Learning brings me a lot of happiness in both academics and life. If you think we could learn from each other, feel free to reach out~~~😆😆😆
+I have a broad range of interest and curiosity. Learning brings me a lot of happiness in both academics and life.
+If you think we could learn from each other, feel free to reach out~~~😆😆😆
 
 # News
 
 <table>
   <tr>
     <td><b>07/2022</b></td>
-    <td>One collaborative paper during PhD program accepted by <b>ACM Multimedia 2022</b>.</td>
+    <td>One collaborative paper during PhD program accepted by <b>ACM Multimedia 2022 & 2023</b>.</td>
   </tr>
   <tr>
     <td><b>09/2021</b></td>
@@ -34,6 +36,7 @@ I have a broad range of interest and curiosity. Learning brings me a lot of happ
 </table>
 
 # Services
+
 <table>
   <tr>
     <!-- <td><b>04/2022</b></td> -->
