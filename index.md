@@ -19,7 +19,7 @@ If you think we could learn from each other, feel free to reach out~~~😆😆�
 <table>
   <tr>
     <td><b>07/2022</b></td>
-    <td>One collaborative paper during PhD program accepted by <b>ACM Multimedia 2022 & 2023</b>.</td>
+    <td>One collaborative paper during PhD program accepted by <b>ACM Multimedia 2022</b>.</td>
   </tr>
   <tr>
     <td><b>09/2021</b></td>
@@ -40,7 +40,7 @@ If you think we could learn from each other, feel free to reach out~~~😆😆�
 <table>
   <tr>
     <!-- <td><b>04/2022</b></td> -->
-    <td>Paper review for <i>ACM Multimedia 2022</i>.</td>
+    <td>Paper review for <i>ACM Multimedia 2022 & 2023</i>.</td>
   </tr>
   <tr>
     <!-- <td><b>04/2022</b></td> -->
