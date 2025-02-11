@@ -1,41 +1,39 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-04-03T15:41:14-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Yingru Liu</title><subtitle>A Personal Homepage</subtitle><entry><title type="html">Some classic and useful signal processing methods</title><link href="http://localhost:4000/Some-Classic-Signal-Processing-Methods/" rel="alternate" type="text/html" title="Some classic and useful signal processing methods" /><published>2021-08-30T00:00:00-04:00</published><updated>2021-08-30T00:00:00-04:00</updated><id>http://localhost:4000/Some-Classic-Signal-Processing-Methods</id><content type="html" xml:base="http://localhost:4000/Some-Classic-Signal-Processing-Methods/">&lt;h2 id=&quot;minimum-variance-distortionless-response-mvdr&quot;&gt;Minimum-Variance Distortionless Response (MVDR)&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-02-10T23:44:50-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Yingru Liu</title><subtitle>A Personal Homepage</subtitle><entry><title type="html">Continuous-Time Kalman Filter</title><link href="http://localhost:4000/Continuous-Time-Kalman-Filter/" rel="alternate" type="text/html" title="Continuous-Time Kalman Filter" /><published>2021-02-24T00:00:00-05:00</published><updated>2021-02-24T00:00:00-05:00</updated><id>http://localhost:4000/Continuous-Time-Kalman-Filter</id><content type="html" xml:base="http://localhost:4000/Continuous-Time-Kalman-Filter/"><![CDATA[<blockquote>
+  <p>Up till now, I dont see any detailed deviation for the Continuous-Time Kalman Filter, the content of this note is all from the Chapter 8 of the Book: <strong>Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches.</strong></p>
+</blockquote>
 
-&lt;h2 id=&quot;recursive-least-square-filter-rls&quot;&gt;Recursive Least Square Filter (RLS)&lt;/h2&gt;</content><author><name></name></author><category term="Study Notes" /><category term="beamforming" /><summary type="html">Minimum-Variance Distortionless Response (MVDR) Recursive Least Square Filter (RLS)</summary></entry><entry><title type="html">Continuous-Time Kalman Filter</title><link href="http://localhost:4000/Continuous-Time-Kalman-Filter/" rel="alternate" type="text/html" title="Continuous-Time Kalman Filter" /><published>2021-02-24T00:00:00-05:00</published><updated>2021-02-24T00:00:00-05:00</updated><id>http://localhost:4000/Continuous-Time-Kalman-Filter</id><content type="html" xml:base="http://localhost:4000/Continuous-Time-Kalman-Filter/">&lt;blockquote&gt;
-  &lt;p&gt;Up till now, I dont see any detailed deviation for the Continuous-Time Kalman Filter, the content of this note is all from the Chapter 8 of the Book: &lt;strong&gt;Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches.&lt;/strong&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+<h2 id="discretization">Discretization</h2>
 
-&lt;h2 id=&quot;discretization&quot;&gt;Discretization&lt;/h2&gt;
-
-&lt;p&gt;Recalled that for a simplified state-space model
+<p>Recalled that for a simplified state-space model
 $\frac{d}{dt} x_t = F_t x_t + B_tu_t,\quad z_t = H_tx_t + v_t, \quad t\geq 0$,
-we have&lt;/p&gt;
+we have</p>
 
 \[x_t = \Phi(t, 0) x_0 + \int^t_0 \Phi(t, s)B_tu_s ds,\]
 
-&lt;p&gt;where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$\Phi(t, s)$&lt;/code&gt; is the state transition function.
-Then by setting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$0$&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$t_{k-1}$&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$t$&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$t_k$&lt;/code&gt; and assuming &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$B_t, u_t$&lt;/code&gt; are approximately constant, we have&lt;/p&gt;
+<p>where <code class="language-plaintext highlighter-rouge">$\Phi(t, s)$</code> is the state transition function.
+Then by setting <code class="language-plaintext highlighter-rouge">$0$</code> to <code class="language-plaintext highlighter-rouge">$t_{k-1}$</code>, <code class="language-plaintext highlighter-rouge">$t$</code> to <code class="language-plaintext highlighter-rouge">$t_k$</code> and assuming <code class="language-plaintext highlighter-rouge">$B_t, u_t$</code> are approximately constant, we have</p>
 
 \[x_{t_k} = \Phi(t_k, t_{k-1}) x_{t_{k-1}} + \int^{t_k}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot B_{t_{k-1}}u_{t_{k-1}}.\]
 
-&lt;p&gt;The previous equation is exactly a discrete time state-space model:&lt;/p&gt;
+<p>The previous equation is exactly a discrete time state-space model:</p>
 
 \[x_k = A_{k-1}x_{k-1} + G_{k-1} u_{k-1},\]
 
-&lt;p&gt;where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$A_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$G_{k-1}=\int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot B_{t_{k-1}}$&lt;/code&gt;.&lt;/p&gt;
+<p>where <code class="language-plaintext highlighter-rouge">$A_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$</code> and <code class="language-plaintext highlighter-rouge">$G_{k-1}=\int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot B_{t_{k-1}}$</code>.</p>
 
-&lt;h3 id=&quot;discretization-for-a-full-state-space-model&quot;&gt;Discretization for a full state-space model&lt;/h3&gt;
-&lt;p&gt;Consider the following state-space model:&lt;/p&gt;
+<h3 id="discretization-for-a-full-state-space-model">Discretization for a full state-space model</h3>
+<p>Consider the following state-space model:</p>
 
 \[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t,\,\, w_t \sim \mathcal{N}(0, Q_t)\\
 y_t = H_t x_t + v_t,\,\, v_t \sim \mathcal{N}(0, R_t),\]
 
-&lt;p&gt;its discretization is given as&lt;/p&gt;
+<p>its discretization is given as</p>
 
 \[x_{k}= A_{k-1}x_{k-1} + B_{k-1}u_{k-1} + w_{k-1},\\
 w_{k-1} = \Lambda_{k-1}w_{(k-1)\Delta t}\\
 y_{k}=C_{k}x_{k} + v_{k},\]
 
-&lt;p&gt;where&lt;/p&gt;
+<p>where</p>
 
 \[A_{k-1} = \Phi(t_{k-1}+\Delta t, t_{k-1}),\\
 B_{k-1} = \int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot G_{t_{k-1}}\approx \Delta t I G_{t_{k-1}},\\
@@ -44,68 +42,68 @@ C_k = H_{(k-1)\Delta t},\\
 w_{k-1} \sim \mathcal{N}(0, Q_{(k-1)\Delta t}\Delta t),\\
 v_{k-1} \sim \mathcal{N}(0, \frac{R_{(k-1)\Delta t}}{\Delta t}).\]
 
-&lt;p&gt;For simplicity, we define the notation &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$Q_{k-1}=Q_{(k-1)\Delta t}\Delta t$&lt;/code&gt;,  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$R_{k-1}=\frac{R_{(k-1)\Delta t}}{\Delta t}$&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$\Phi_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$&lt;/code&gt;.&lt;/p&gt;
+<p>For simplicity, we define the notation <code class="language-plaintext highlighter-rouge">$Q_{k-1}=Q_{(k-1)\Delta t}\Delta t$</code>,  <code class="language-plaintext highlighter-rouge">$R_{k-1}=\frac{R_{(k-1)\Delta t}}{\Delta t}$</code> and <code class="language-plaintext highlighter-rouge">$\Phi_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$</code>.</p>
 
-&lt;h3 id=&quot;evaluating-the-covariance-after-discretization&quot;&gt;Evaluating the Covariance after Discretization&lt;/h3&gt;
-&lt;p&gt;By the previous step, we can discretize the differential equation into an discrete difference equation. However, the covariances of white noise &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$w_t$&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$w_t$&lt;/code&gt; should be carefully evaluated, so that the stochasititicy is identical.&lt;/p&gt;
+<h3 id="evaluating-the-covariance-after-discretization">Evaluating the Covariance after Discretization</h3>
+<p>By the previous step, we can discretize the differential equation into an discrete difference equation. However, the covariances of white noise <code class="language-plaintext highlighter-rouge">$w_t$</code> and <code class="language-plaintext highlighter-rouge">$w_t$</code> should be carefully evaluated, so that the stochasititicy is identical.</p>
 
-&lt;p&gt;&lt;strong&gt;(i).&lt;/strong&gt; The discretization of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$w_t$&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$w_t$&lt;/code&gt; is a little bit tricky (at leat in my opinion). In the book, If we discretize the state-space model, we can define a discrete-time Kalman Filter and the error of this book should be independent with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$\Delta t$&lt;/code&gt;. To my understanding, we are discretizing the rectangle volume &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$\int_0^{\Delta t}R_{\tau}d\tau$&lt;/code&gt; in the curve of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$Q_t$&lt;/code&gt; into a point value, to assure that the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$\Delta t \times R$&lt;/code&gt; is equal to the integral, we set &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$v_{t_{k-1}}\sim \mathcal{N}(0, R_{t_{k-1}}/\Delta t)$&lt;/code&gt;. Similarly, we set
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$w_{t_{k-1}}\sim \mathcal{N}(0, Q_{t_{k-1}}/\Delta t)$&lt;/code&gt;.&lt;/p&gt;
+<p><strong>(i).</strong> The discretization of <code class="language-plaintext highlighter-rouge">$w_t$</code> and <code class="language-plaintext highlighter-rouge">$w_t$</code> is a little bit tricky (at leat in my opinion). In the book, If we discretize the state-space model, we can define a discrete-time Kalman Filter and the error of this book should be independent with <code class="language-plaintext highlighter-rouge">$\Delta t$</code>. To my understanding, we are discretizing the rectangle volume <code class="language-plaintext highlighter-rouge">$\int_0^{\Delta t}R_{\tau}d\tau$</code> in the curve of <code class="language-plaintext highlighter-rouge">$Q_t$</code> into a point value, to assure that the <code class="language-plaintext highlighter-rouge">$\Delta t \times R$</code> is equal to the integral, we set <code class="language-plaintext highlighter-rouge">$v_{t_{k-1}}\sim \mathcal{N}(0, R_{t_{k-1}}/\Delta t)$</code>. Similarly, we set
+<code class="language-plaintext highlighter-rouge">$w_{t_{k-1}}\sim \mathcal{N}(0, Q_{t_{k-1}}/\Delta t)$</code>.</p>
 
-&lt;p&gt;&lt;strong&gt;(i).&lt;/strong&gt; We replace &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$w_t$&lt;/code&gt; by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$\Lambda_{k-1}w_{t_{k-1}}$&lt;/code&gt;. As &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$\Lambda_{k-1}\approx \Delta t I$&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$w_{t_{k-1}}\sim \mathcal{N}(0, Q_{t_{k-1}}/\Delta t)$&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$w_{k-1}\sim \mathcal{N}(0, \Delta t Q_{t_{k-1}})$&lt;/code&gt;.&lt;/p&gt;
+<p><strong>(i).</strong> We replace <code class="language-plaintext highlighter-rouge">$w_t$</code> by <code class="language-plaintext highlighter-rouge">$\Lambda_{k-1}w_{t_{k-1}}$</code>. As <code class="language-plaintext highlighter-rouge">$\Lambda_{k-1}\approx \Delta t I$</code> and <code class="language-plaintext highlighter-rouge">$w_{t_{k-1}}\sim \mathcal{N}(0, Q_{t_{k-1}}/\Delta t)$</code>, <code class="language-plaintext highlighter-rouge">$w_{k-1}\sim \mathcal{N}(0, \Delta t Q_{t_{k-1}})$</code>.</p>
 
-&lt;h3 id=&quot;deviation-of-continuous-time-kalman-filter&quot;&gt;Deviation of Continuous-Time Kalman Filter&lt;/h3&gt;
-&lt;p&gt;After the discretization, we can define a discrete-time Kalman Filter whose &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$K_n$&lt;/code&gt; is denoted as&lt;/p&gt;
+<h3 id="deviation-of-continuous-time-kalman-filter">Deviation of Continuous-Time Kalman Filter</h3>
+<p>After the discretization, we can define a discrete-time Kalman Filter whose <code class="language-plaintext highlighter-rouge">$K_n$</code> is denoted as</p>
 
 \[K_k = P_k^fC_k^TD_k^{-1}=P_k^fC_k^T(C_k P_k^f C_k^T + R_k)^{-1}\\
 = P_k^f H_{k-1}^T(H_{k-1} P_k^fH_{k-1}^T + R_{k-1}/\Delta t)^{-1},\]
 
-&lt;p&gt;and therefore,&lt;/p&gt;
+<p>and therefore,</p>
 
 \[\lim_{\Delta t\rightarrow 0} \frac{K_k}{\Delta t} = \lim_{\Delta t\rightarrow 0} P_k^f H_{k-1}^T(\Delta t H_{k-1} P_k^fH_{k-1}^T + R_{k-1})^{-1} \\
 = P_k^f H_{k-1}^T(R_{k-1})^{-1}.\]
 
-&lt;p&gt;We also have&lt;/p&gt;
+<p>We also have</p>
 
 \[P_k = (I - K_k C_k)P_k^f,\\
 P_k^f = A_{k-1}P_{k-1}A_{k-1}^T + Q_{k-1}.\]
 
-&lt;p&gt;Substituting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$A_{k-1}$&lt;/code&gt; into it, we have&lt;/p&gt;
+<p>Substituting <code class="language-plaintext highlighter-rouge">$A_{k-1}$</code> into it, we have</p>
 
 \[P_{k}^f = \Phi_{k-1}P_{k-1}P_{k-1}^f\Phi_{k-1}^T + Q_{k-1}\Delta t\\\]
 
-&lt;p&gt;By the property of STM, we further have&lt;/p&gt;
+<p>By the property of STM, we further have</p>
 
 \[P_{k}^f = (I + \Delta tF_{k-1}\Phi_{k-1})P_{k-1}(I + \Delta tF_{k-1}\Phi_{k-1})^T + Q_{k-1}\Delta t\\
 = P_{k-1} + \Delta tF_{k-1}\Phi_{k-1}P_{k-1} + \Delta t P_{k-1}\Phi_{k-1}^TF_{k-1}^T\\ + (\Delta t)^2F_{k-1}\Phi_{k-1}P_{k-1}\Phi_{k-1}^TF_{k-1}^T + Q_{k-1}\Delta t,\]
 
-&lt;p&gt;Substituting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$P_{k-1}^f$&lt;/code&gt; into it, we have&lt;/p&gt;
+<p>Substituting <code class="language-plaintext highlighter-rouge">$P_{k-1}^f$</code> into it, we have</p>
 
 \[P_{k}^f = (I - K_{k-1} C_{k-1})P_{k-1}^f + \Delta tF_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f \\
 + \Delta t (I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\
 + (\Delta t)^2F_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\
 + Q_{(k-1)\Delta t}\Delta t,\]
 
-&lt;p&gt;and&lt;/p&gt;
+<p>and</p>
 
 \[\frac{P_{k}^f-P_{k-1}^f}{\Delta t} = -\frac{- K_{k-1} C_{k-1}P_{k-1}^f}{\Delta t} + F_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\\
 + (I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\
 + \Delta tF_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T.\]
 
-&lt;p&gt;Taking the limitation yields:&lt;/p&gt;
+<p>Taking the limitation yields:</p>
 
 \[\lim_{\Delta t\rightarrow 0} \frac{P_{k}^f-P_{k-1}^f}{\Delta t} =-P_k^f H_{k-1}^TR_{k-1}^{-1}H_{k-1}^TP_{k-1}^f\\
 + F_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f + (I - K_{k-1} C_{k-1})P_{k-1}^fF_{k-1}^T + Q_{k-1}\\
 =\lim_{\Delta t\rightarrow 0} -P_k^f H_{k-1}^TR_{k-1}^{-1}H_{k-1}^TP_{k-1}^f + F_{k-1}P_{k-1}^f + P_{k-1}^fF_{k-1}^T\\
 - F_{k-1}K_{k-1} C_{k-1}P_{k-1}^f - K_{k-1} C_{k-1}P_{k-1}^fF_{k-1}^T + Q_{k-1}\\\]
 
-&lt;p&gt;Recall that there is a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$\Delta t$&lt;/code&gt; in computing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$K_{k-1}$&lt;/code&gt;, which leads to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$\lim_{\Delta t\rightarrow 0}F_{k-1}K_{k-1} C_{k-1}P_{k-1}^f=0$&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$\lim_{\Delta t\rightarrow 0}K_{k-1} C_{k-1}P_{k-1}^fF_{k-1}^T=0$&lt;/code&gt;, we have&lt;/p&gt;
+<p>Recall that there is a <code class="language-plaintext highlighter-rouge">$\Delta t$</code> in computing <code class="language-plaintext highlighter-rouge">$K_{k-1}$</code>, which leads to <code class="language-plaintext highlighter-rouge">$\lim_{\Delta t\rightarrow 0}F_{k-1}K_{k-1} C_{k-1}P_{k-1}^f=0$</code> and <code class="language-plaintext highlighter-rouge">$\lim_{\Delta t\rightarrow 0}K_{k-1} C_{k-1}P_{k-1}^fF_{k-1}^T=0$</code>, we have</p>
 
 \[\frac{d}{dt}P_t=-P_t H_t^TR_t^{-1}H_t^TP_t + F_tP_t + P_t F_t^T + Q_t,\]
 
-&lt;p&gt;where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$P_t$&lt;/code&gt; is the continuous counterpart of prior covariance &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$P_k^f$&lt;/code&gt; (not the posterior one). This equation is also an instance of the Differential Riccati Equation.&lt;/p&gt;
+<p>where <code class="language-plaintext highlighter-rouge">$P_t$</code> is the continuous counterpart of prior covariance <code class="language-plaintext highlighter-rouge">$P_k^f$</code> (not the posterior one). This equation is also an instance of the Differential Riccati Equation.</p>
 
-&lt;p&gt;For the estimate &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$x_k^a$&lt;/code&gt;, when &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$\Delta t\rightarrow 0$&lt;/code&gt;, we also have&lt;/p&gt;
+<p>For the estimate <code class="language-plaintext highlighter-rouge">$x_k^a$</code>, when <code class="language-plaintext highlighter-rouge">$\Delta t\rightarrow 0$</code>, we also have</p>
 
 \[x_k^a = A_{k-1}x_{k-1}^a + B_{k-1} u_{k-1} + K_k(z_k - C_kA_{k-1}x_{k-1}^a - C_kB_{k-1} u_{k-1})\\
 =(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a + B_{k-1} u_{k-1} + K_k(z_k - C_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a - C_kB_{k-1} u_{k-1})\\
@@ -115,53 +113,53 @@ P_k^f = A_{k-1}P_{k-1}A_{k-1}^T + Q_{k-1}.\]
 -\Delta tP_k^f H_{k-1}^T(R_{k-1})^{-1}H_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a\\
 -\Delta t P_k^f H_{k-1}^T(R_{k-1})^{-1} H_kB_{k-1} u_{k-1}.\]
 
-&lt;p&gt;Hence, we have&lt;/p&gt;
+<p>Hence, we have</p>
 
 \[\lim_{\Delta t\rightarrow 0}\frac{x_k^a - x_{k-1}^a}{\Delta t} = F_{k-1}x_{k-1}^a+ G_{k-1}u_{k-1} + P_k^f H_{k-1}^T(R_{k-1})^{-1}(z_k-H_kx_{k-1}^a).\]
 
-&lt;p&gt;That is&lt;/p&gt;
+<p>That is</p>
 
 \[\frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + P_k H_t^TR_t^{-1}(Z-H_t\hat{x}_t).\]
 
-&lt;h2 id=&quot;summary-of-continuous-time-kf&quot;&gt;Summary of Continuous-Time KF&lt;/h2&gt;
+<h2 id="summary-of-continuous-time-kf">Summary of Continuous-Time KF</h2>
 
 \[\frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + K_t(Z-H_t\hat{x}_t),\\
 \frac{d}{dt}P_t=-P_t H_t^TR_t^{-1}H_t^TP_t + F_tP_t + P_t F_t^T + Q_t,\\
 K_t = P_k H_t^TR_t^{-1}.\]
 
-&lt;h2 id=&quot;accelerated-method-for-riccati-equation&quot;&gt;Accelerated Method for Riccati Equation&lt;/h2&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;The ODE of estimate covariance &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$P$&lt;/code&gt; is a Differential Riccati Equation, which is computationally costly. To acclerate the algorithm, several algorithms have been proposed, including &lt;em&gt;Transition Matrix Approach&lt;/em&gt; and &lt;em&gt;Chandrasekhar Algorithm&lt;/em&gt;. Details can be found in the Chapter 8.3 in the Book: &lt;strong&gt;Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches.&lt;/strong&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+<h2 id="accelerated-method-for-riccati-equation">Accelerated Method for Riccati Equation</h2>
+<blockquote>
+  <p>The ODE of estimate covariance <code class="language-plaintext highlighter-rouge">$P$</code> is a Differential Riccati Equation, which is computationally costly. To acclerate the algorithm, several algorithms have been proposed, including <em>Transition Matrix Approach</em> and <em>Chandrasekhar Algorithm</em>. Details can be found in the Chapter 8.3 in the Book: <strong>Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches.</strong></p>
+</blockquote>
 
-&lt;h2 id=&quot;continuous-time-kf-for-correlated-noise&quot;&gt;Continuous-Time KF for correlated Noise&lt;/h2&gt;
-&lt;p&gt;Consider the following continuous-time system:&lt;/p&gt;
+<h2 id="continuous-time-kf-for-correlated-noise">Continuous-Time KF for correlated Noise</h2>
+<p>Consider the following continuous-time system:</p>
 
 \[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t,\,\, w_t \sim \mathcal{N}(0, Q_t)\\
 y_t = H_t x_t + v_t,\,\, v_t \sim \mathcal{N}(0, R_t),\\
 \mathbb{E}(w_t v_\tau^T) = M_t\delta(t-\tau).\]
 
-&lt;p&gt;As &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$w_t$&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$v_\tau$&lt;/code&gt; are correlated in time &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$t$&lt;/code&gt;, we need to decorrelate them. We can rewrite the system dynamics as&lt;/p&gt;
+<p>As <code class="language-plaintext highlighter-rouge">$w_t$</code> and <code class="language-plaintext highlighter-rouge">$v_\tau$</code> are correlated in time <code class="language-plaintext highlighter-rouge">$t$</code>, we need to decorrelate them. We can rewrite the system dynamics as</p>
 
 \[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t + M_tR_t^{-1}(y_t - H_t x_t - v_t)\\
 = (F_t-M_tR_t^{-1}H_t)x_t + M_t R_{t}^{-1}y_t + (w_t - M_tR_t^{-1}v_t)\\
 = \tilde{F}_t x_t + \tilde{u}_t + \tilde{w}_t.\]
 
-&lt;p&gt;where&lt;/p&gt;
+<p>where</p>
 
 \[\tilde{F}_t = F_t-M_tR_t^{-1}H_t,\,\, \tilde{u}_t=M_t R_{t}^{-1}y_t,\,\,\tilde{w}_t=w - M_tR_t^{-1}v_t.\]
 
-&lt;p&gt;We have&lt;/p&gt;
+<p>We have</p>
 
 \[\mathbb{E}(\tilde{w}_t v_\tau^T) = \mathbb{E}(\tilde{w}_t v_\tau^T)= \mathbb{E}((w_t - M_tR_t^{-1}v_t) v_\tau^T) \\
 = \mathbb{E}(w_t v_\tau^T) - M_tR_t^{-1}\mathbb{E}(v_t v_t^T) = M - M = 0\]
 
-&lt;p&gt;and&lt;/p&gt;
+<p>and</p>
 
 \[\tilde{Q}_t = \mathbb{E}(\tilde{w}_t \tilde{w}_t^T) = Q_t - M_t R_t^{-1} M_t^T.\]
 
-&lt;p&gt;We can define the continuous-time Kalman Filter for this equivalent dynamics system. In the book, it also introduces how to tackle the non-white noise.&lt;/p&gt;
+<p>We can define the continuous-time Kalman Filter for this equivalent dynamics system. In the book, it also introduces how to tackle the non-white noise.</p>
 
-&lt;h2 id=&quot;the-steady-state-continuous-time-kalman-filter&quot;&gt;The Steady-State Continuous-Time Kalman Filter&lt;/h2&gt;
+<h2 id="the-steady-state-continuous-time-kalman-filter">The Steady-State Continuous-Time Kalman Filter</h2>
 
-&lt;p&gt;[To Be Continue]&lt;/p&gt;</content><author><name></name></author><category term="Study Notes" /><category term="Statistical Signal Processing" /><summary type="html">Up till now, I dont see any detailed deviation for the Continuous-Time Kalman Filter, the content of this note is all from the Chapter 8 of the Book: Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches. Discretization Recalled that for a simplified state-space model $\frac{d}{dt} x_t = F_t x_t + B_tu_t,\quad z_t = H_tx_t + v_t, \quad t\geq 0$, we have \[x_t = \Phi(t, 0) x_0 + \int^t_0 \Phi(t, s)B_tu_s ds,\] where $\Phi(t, s)$ is the state transition function. Then by setting $0$ to $t_{k-1}$, $t$ to $t_k$ and assuming $B_t, u_t$ are approximately constant, we have \[x_{t_k} = \Phi(t_k, t_{k-1}) x_{t_{k-1}} + \int^{t_k}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot B_{t_{k-1}}u_{t_{k-1}}.\] The previous equation is exactly a discrete time state-space model: \[x_k = A_{k-1}x_{k-1} + G_{k-1} u_{k-1},\] where $A_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$ and $G_{k-1}=\int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot B_{t_{k-1}}$. Discretization for a full state-space model Consider the following state-space model: \[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t,\,\, w_t \sim \mathcal{N}(0, Q_t)\\ y_t = H_t x_t + v_t,\,\, v_t \sim \mathcal{N}(0, R_t),\] its discretization is given as \[x_{k}= A_{k-1}x_{k-1} + B_{k-1}u_{k-1} + w_{k-1},\\ w_{k-1} = \Lambda_{k-1}w_{(k-1)\Delta t}\\ y_{k}=C_{k}x_{k} + v_{k},\] where \[A_{k-1} = \Phi(t_{k-1}+\Delta t, t_{k-1}),\\ B_{k-1} = \int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot G_{t_{k-1}}\approx \Delta t I G_{t_{k-1}},\\ \Lambda_{k-1}=\int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\approx \Delta t I,\\ C_k = H_{(k-1)\Delta t},\\ w_{k-1} \sim \mathcal{N}(0, Q_{(k-1)\Delta t}\Delta t),\\ v_{k-1} \sim \mathcal{N}(0, \frac{R_{(k-1)\Delta t}}{\Delta t}).\] For simplicity, we define the notation $Q_{k-1}=Q_{(k-1)\Delta t}\Delta t$, $R_{k-1}=\frac{R_{(k-1)\Delta t}}{\Delta t}$ and $\Phi_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$. Evaluating the Covariance after Discretization By the previous step, we can discretize the differential equation into an discrete difference equation. However, the covariances of white noise $w_t$ and $w_t$ should be carefully evaluated, so that the stochasititicy is identical. (i). The discretization of $w_t$ and $w_t$ is a little bit tricky (at leat in my opinion). In the book, If we discretize the state-space model, we can define a discrete-time Kalman Filter and the error of this book should be independent with $\Delta t$. To my understanding, we are discretizing the rectangle volume $\int_0^{\Delta t}R_{\tau}d\tau$ in the curve of $Q_t$ into a point value, to assure that the $\Delta t \times R$ is equal to the integral, we set $v_{t_{k-1}}\sim \mathcal{N}(0, R_{t_{k-1}}/\Delta t)$. Similarly, we set $w_{t_{k-1}}\sim \mathcal{N}(0, Q_{t_{k-1}}/\Delta t)$. (i). We replace $w_t$ by $\Lambda_{k-1}w_{t_{k-1}}$. As $\Lambda_{k-1}\approx \Delta t I$ and $w_{t_{k-1}}\sim \mathcal{N}(0, Q_{t_{k-1}}/\Delta t)$, $w_{k-1}\sim \mathcal{N}(0, \Delta t Q_{t_{k-1}})$. Deviation of Continuous-Time Kalman Filter After the discretization, we can define a discrete-time Kalman Filter whose $K_n$ is denoted as \[K_k = P_k^fC_k^TD_k^{-1}=P_k^fC_k^T(C_k P_k^f C_k^T + R_k)^{-1}\\ = P_k^f H_{k-1}^T(H_{k-1} P_k^fH_{k-1}^T + R_{k-1}/\Delta t)^{-1},\] and therefore, \[\lim_{\Delta t\rightarrow 0} \frac{K_k}{\Delta t} = \lim_{\Delta t\rightarrow 0} P_k^f H_{k-1}^T(\Delta t H_{k-1} P_k^fH_{k-1}^T + R_{k-1})^{-1} \\ = P_k^f H_{k-1}^T(R_{k-1})^{-1}.\] We also have \[P_k = (I - K_k C_k)P_k^f,\\ P_k^f = A_{k-1}P_{k-1}A_{k-1}^T + Q_{k-1}.\] Substituting $A_{k-1}$ into it, we have \[P_{k}^f = \Phi_{k-1}P_{k-1}P_{k-1}^f\Phi_{k-1}^T + Q_{k-1}\Delta t\\\] By the property of STM, we further have \[P_{k}^f = (I + \Delta tF_{k-1}\Phi_{k-1})P_{k-1}(I + \Delta tF_{k-1}\Phi_{k-1})^T + Q_{k-1}\Delta t\\ = P_{k-1} + \Delta tF_{k-1}\Phi_{k-1}P_{k-1} + \Delta t P_{k-1}\Phi_{k-1}^TF_{k-1}^T\\ + (\Delta t)^2F_{k-1}\Phi_{k-1}P_{k-1}\Phi_{k-1}^TF_{k-1}^T + Q_{k-1}\Delta t,\] Substituting $P_{k-1}^f$ into it, we have \[P_{k}^f = (I - K_{k-1} C_{k-1})P_{k-1}^f + \Delta tF_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f \\ + \Delta t (I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\ + (\Delta t)^2F_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\ + Q_{(k-1)\Delta t}\Delta t,\] and \[\frac{P_{k}^f-P_{k-1}^f}{\Delta t} = -\frac{- K_{k-1} C_{k-1}P_{k-1}^f}{\Delta t} + F_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\\ + (I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\ + \Delta tF_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T.\] Taking the limitation yields: \[\lim_{\Delta t\rightarrow 0} \frac{P_{k}^f-P_{k-1}^f}{\Delta t} =-P_k^f H_{k-1}^TR_{k-1}^{-1}H_{k-1}^TP_{k-1}^f\\ + F_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f + (I - K_{k-1} C_{k-1})P_{k-1}^fF_{k-1}^T + Q_{k-1}\\ =\lim_{\Delta t\rightarrow 0} -P_k^f H_{k-1}^TR_{k-1}^{-1}H_{k-1}^TP_{k-1}^f + F_{k-1}P_{k-1}^f + P_{k-1}^fF_{k-1}^T\\ - F_{k-1}K_{k-1} C_{k-1}P_{k-1}^f - K_{k-1} C_{k-1}P_{k-1}^fF_{k-1}^T + Q_{k-1}\\\] Recall that there is a $\Delta t$ in computing $K_{k-1}$, which leads to $\lim_{\Delta t\rightarrow 0}F_{k-1}K_{k-1} C_{k-1}P_{k-1}^f=0$ and $\lim_{\Delta t\rightarrow 0}K_{k-1} C_{k-1}P_{k-1}^fF_{k-1}^T=0$, we have \[\frac{d}{dt}P_t=-P_t H_t^TR_t^{-1}H_t^TP_t + F_tP_t + P_t F_t^T + Q_t,\] where $P_t$ is the continuous counterpart of prior covariance $P_k^f$ (not the posterior one). This equation is also an instance of the Differential Riccati Equation. For the estimate $x_k^a$, when $\Delta t\rightarrow 0$, we also have \[x_k^a = A_{k-1}x_{k-1}^a + B_{k-1} u_{k-1} + K_k(z_k - C_kA_{k-1}x_{k-1}^a - C_kB_{k-1} u_{k-1})\\ =(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a + B_{k-1} u_{k-1} + K_k(z_k - C_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a - C_kB_{k-1} u_{k-1})\\ = x_{k-1}^a + \Delta tF_{k-1}\Phi_{k-1}x_{k-1}^a + B_{k-1} u_{k-1} + K_kz_k-K_kC_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a\\ -K_k C_kB_{k-1} u_{k-1},\\ = x_{k-1}^a + \Delta tF_{k-1}\Phi_{k-1}x_{k-1}^a + \Delta t G_{k-1} u_{k-1} + \Delta tP_k^f H_{k-1}^T(R_{k-1})^{-1}z_k\\ -\Delta tP_k^f H_{k-1}^T(R_{k-1})^{-1}H_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a\\ -\Delta t P_k^f H_{k-1}^T(R_{k-1})^{-1} H_kB_{k-1} u_{k-1}.\] Hence, we have \[\lim_{\Delta t\rightarrow 0}\frac{x_k^a - x_{k-1}^a}{\Delta t} = F_{k-1}x_{k-1}^a+ G_{k-1}u_{k-1} + P_k^f H_{k-1}^T(R_{k-1})^{-1}(z_k-H_kx_{k-1}^a).\] That is \[\frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + P_k H_t^TR_t^{-1}(Z-H_t\hat{x}_t).\] Summary of Continuous-Time KF \[\frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + K_t(Z-H_t\hat{x}_t),\\ \frac{d}{dt}P_t=-P_t H_t^TR_t^{-1}H_t^TP_t + F_tP_t + P_t F_t^T + Q_t,\\ K_t = P_k H_t^TR_t^{-1}.\] Accelerated Method for Riccati Equation The ODE of estimate covariance $P$ is a Differential Riccati Equation, which is computationally costly. To acclerate the algorithm, several algorithms have been proposed, including Transition Matrix Approach and Chandrasekhar Algorithm. Details can be found in the Chapter 8.3 in the Book: Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches. Continuous-Time KF for correlated Noise Consider the following continuous-time system: \[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t,\,\, w_t \sim \mathcal{N}(0, Q_t)\\ y_t = H_t x_t + v_t,\,\, v_t \sim \mathcal{N}(0, R_t),\\ \mathbb{E}(w_t v_\tau^T) = M_t\delta(t-\tau).\] As $w_t$ and $v_\tau$ are correlated in time $t$, we need to decorrelate them. We can rewrite the system dynamics as \[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t + M_tR_t^{-1}(y_t - H_t x_t - v_t)\\ = (F_t-M_tR_t^{-1}H_t)x_t + M_t R_{t}^{-1}y_t + (w_t - M_tR_t^{-1}v_t)\\ = \tilde{F}_t x_t + \tilde{u}_t + \tilde{w}_t.\] where \[\tilde{F}_t = F_t-M_tR_t^{-1}H_t,\,\, \tilde{u}_t=M_t R_{t}^{-1}y_t,\,\,\tilde{w}_t=w - M_tR_t^{-1}v_t.\] We have \[\mathbb{E}(\tilde{w}_t v_\tau^T) = \mathbb{E}(\tilde{w}_t v_\tau^T)= \mathbb{E}((w_t - M_tR_t^{-1}v_t) v_\tau^T) \\ = \mathbb{E}(w_t v_\tau^T) - M_tR_t^{-1}\mathbb{E}(v_t v_t^T) = M - M = 0\] and \[\tilde{Q}_t = \mathbb{E}(\tilde{w}_t \tilde{w}_t^T) = Q_t - M_t R_t^{-1} M_t^T.\] We can define the continuous-time Kalman Filter for this equivalent dynamics system. In the book, it also introduces how to tackle the non-white noise. The Steady-State Continuous-Time Kalman Filter [To Be Continue]</summary></entry></feed>
+<p>[To Be Continue]</p>]]></content><author><name></name></author><category term="Study Notes" /><category term="Statistical Signal Processing" /><summary type="html"><![CDATA[Up till now, I dont see any detailed deviation for the Continuous-Time Kalman Filter, the content of this note is all from the Chapter 8 of the Book: Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches. Discretization Recalled that for a simplified state-space model $\frac{d}{dt} x_t = F_t x_t + B_tu_t,\quad z_t = H_tx_t + v_t, \quad t\geq 0$, we have \[x_t = \Phi(t, 0) x_0 + \int^t_0 \Phi(t, s)B_tu_s ds,\] where $\Phi(t, s)$ is the state transition function. Then by setting $0$ to $t_{k-1}$, $t$ to $t_k$ and assuming $B_t, u_t$ are approximately constant, we have \[x_{t_k} = \Phi(t_k, t_{k-1}) x_{t_{k-1}} + \int^{t_k}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot B_{t_{k-1}}u_{t_{k-1}}.\] The previous equation is exactly a discrete time state-space model: \[x_k = A_{k-1}x_{k-1} + G_{k-1} u_{k-1},\] where $A_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$ and $G_{k-1}=\int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot B_{t_{k-1}}$. Discretization for a full state-space model Consider the following state-space model: \[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t,\,\, w_t \sim \mathcal{N}(0, Q_t)\\ y_t = H_t x_t + v_t,\,\, v_t \sim \mathcal{N}(0, R_t),\] its discretization is given as \[x_{k}= A_{k-1}x_{k-1} + B_{k-1}u_{k-1} + w_{k-1},\\ w_{k-1} = \Lambda_{k-1}w_{(k-1)\Delta t}\\ y_{k}=C_{k}x_{k} + v_{k},\] where \[A_{k-1} = \Phi(t_{k-1}+\Delta t, t_{k-1}),\\ B_{k-1} = \int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\cdot G_{t_{k-1}}\approx \Delta t I G_{t_{k-1}},\\ \Lambda_{k-1}=\int^{t_{k-1}+\Delta t}_{t_{k-1}} \Phi(t_{k}, s)ds\approx \Delta t I,\\ C_k = H_{(k-1)\Delta t},\\ w_{k-1} \sim \mathcal{N}(0, Q_{(k-1)\Delta t}\Delta t),\\ v_{k-1} \sim \mathcal{N}(0, \frac{R_{(k-1)\Delta t}}{\Delta t}).\] For simplicity, we define the notation $Q_{k-1}=Q_{(k-1)\Delta t}\Delta t$, $R_{k-1}=\frac{R_{(k-1)\Delta t}}{\Delta t}$ and $\Phi_{k-1}=\Phi(t_{k-1}+\Delta t, t_{k-1})$. Evaluating the Covariance after Discretization By the previous step, we can discretize the differential equation into an discrete difference equation. However, the covariances of white noise $w_t$ and $w_t$ should be carefully evaluated, so that the stochasititicy is identical. (i). The discretization of $w_t$ and $w_t$ is a little bit tricky (at leat in my opinion). In the book, If we discretize the state-space model, we can define a discrete-time Kalman Filter and the error of this book should be independent with $\Delta t$. To my understanding, we are discretizing the rectangle volume $\int_0^{\Delta t}R_{\tau}d\tau$ in the curve of $Q_t$ into a point value, to assure that the $\Delta t \times R$ is equal to the integral, we set $v_{t_{k-1}}\sim \mathcal{N}(0, R_{t_{k-1}}/\Delta t)$. Similarly, we set $w_{t_{k-1}}\sim \mathcal{N}(0, Q_{t_{k-1}}/\Delta t)$. (i). We replace $w_t$ by $\Lambda_{k-1}w_{t_{k-1}}$. As $\Lambda_{k-1}\approx \Delta t I$ and $w_{t_{k-1}}\sim \mathcal{N}(0, Q_{t_{k-1}}/\Delta t)$, $w_{k-1}\sim \mathcal{N}(0, \Delta t Q_{t_{k-1}})$. Deviation of Continuous-Time Kalman Filter After the discretization, we can define a discrete-time Kalman Filter whose $K_n$ is denoted as \[K_k = P_k^fC_k^TD_k^{-1}=P_k^fC_k^T(C_k P_k^f C_k^T + R_k)^{-1}\\ = P_k^f H_{k-1}^T(H_{k-1} P_k^fH_{k-1}^T + R_{k-1}/\Delta t)^{-1},\] and therefore, \[\lim_{\Delta t\rightarrow 0} \frac{K_k}{\Delta t} = \lim_{\Delta t\rightarrow 0} P_k^f H_{k-1}^T(\Delta t H_{k-1} P_k^fH_{k-1}^T + R_{k-1})^{-1} \\ = P_k^f H_{k-1}^T(R_{k-1})^{-1}.\] We also have \[P_k = (I - K_k C_k)P_k^f,\\ P_k^f = A_{k-1}P_{k-1}A_{k-1}^T + Q_{k-1}.\] Substituting $A_{k-1}$ into it, we have \[P_{k}^f = \Phi_{k-1}P_{k-1}P_{k-1}^f\Phi_{k-1}^T + Q_{k-1}\Delta t\\\] By the property of STM, we further have \[P_{k}^f = (I + \Delta tF_{k-1}\Phi_{k-1})P_{k-1}(I + \Delta tF_{k-1}\Phi_{k-1})^T + Q_{k-1}\Delta t\\ = P_{k-1} + \Delta tF_{k-1}\Phi_{k-1}P_{k-1} + \Delta t P_{k-1}\Phi_{k-1}^TF_{k-1}^T\\ + (\Delta t)^2F_{k-1}\Phi_{k-1}P_{k-1}\Phi_{k-1}^TF_{k-1}^T + Q_{k-1}\Delta t,\] Substituting $P_{k-1}^f$ into it, we have \[P_{k}^f = (I - K_{k-1} C_{k-1})P_{k-1}^f + \Delta tF_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f \\ + \Delta t (I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\ + (\Delta t)^2F_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\ + Q_{(k-1)\Delta t}\Delta t,\] and \[\frac{P_{k}^f-P_{k-1}^f}{\Delta t} = -\frac{- K_{k-1} C_{k-1}P_{k-1}^f}{\Delta t} + F_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\\ + (I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T \\ + \Delta tF_{k-1}\Phi_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f\Phi_{k-1}^TF_{k-1}^T.\] Taking the limitation yields: \[\lim_{\Delta t\rightarrow 0} \frac{P_{k}^f-P_{k-1}^f}{\Delta t} =-P_k^f H_{k-1}^TR_{k-1}^{-1}H_{k-1}^TP_{k-1}^f\\ + F_{k-1}(I - K_{k-1} C_{k-1})P_{k-1}^f + (I - K_{k-1} C_{k-1})P_{k-1}^fF_{k-1}^T + Q_{k-1}\\ =\lim_{\Delta t\rightarrow 0} -P_k^f H_{k-1}^TR_{k-1}^{-1}H_{k-1}^TP_{k-1}^f + F_{k-1}P_{k-1}^f + P_{k-1}^fF_{k-1}^T\\ - F_{k-1}K_{k-1} C_{k-1}P_{k-1}^f - K_{k-1} C_{k-1}P_{k-1}^fF_{k-1}^T + Q_{k-1}\\\] Recall that there is a $\Delta t$ in computing $K_{k-1}$, which leads to $\lim_{\Delta t\rightarrow 0}F_{k-1}K_{k-1} C_{k-1}P_{k-1}^f=0$ and $\lim_{\Delta t\rightarrow 0}K_{k-1} C_{k-1}P_{k-1}^fF_{k-1}^T=0$, we have \[\frac{d}{dt}P_t=-P_t H_t^TR_t^{-1}H_t^TP_t + F_tP_t + P_t F_t^T + Q_t,\] where $P_t$ is the continuous counterpart of prior covariance $P_k^f$ (not the posterior one). This equation is also an instance of the Differential Riccati Equation. For the estimate $x_k^a$, when $\Delta t\rightarrow 0$, we also have \[x_k^a = A_{k-1}x_{k-1}^a + B_{k-1} u_{k-1} + K_k(z_k - C_kA_{k-1}x_{k-1}^a - C_kB_{k-1} u_{k-1})\\ =(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a + B_{k-1} u_{k-1} + K_k(z_k - C_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a - C_kB_{k-1} u_{k-1})\\ = x_{k-1}^a + \Delta tF_{k-1}\Phi_{k-1}x_{k-1}^a + B_{k-1} u_{k-1} + K_kz_k-K_kC_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a\\ -K_k C_kB_{k-1} u_{k-1},\\ = x_{k-1}^a + \Delta tF_{k-1}\Phi_{k-1}x_{k-1}^a + \Delta t G_{k-1} u_{k-1} + \Delta tP_k^f H_{k-1}^T(R_{k-1})^{-1}z_k\\ -\Delta tP_k^f H_{k-1}^T(R_{k-1})^{-1}H_k(I + \Delta tF_{k-1}\Phi_{k-1})x_{k-1}^a\\ -\Delta t P_k^f H_{k-1}^T(R_{k-1})^{-1} H_kB_{k-1} u_{k-1}.\] Hence, we have \[\lim_{\Delta t\rightarrow 0}\frac{x_k^a - x_{k-1}^a}{\Delta t} = F_{k-1}x_{k-1}^a+ G_{k-1}u_{k-1} + P_k^f H_{k-1}^T(R_{k-1})^{-1}(z_k-H_kx_{k-1}^a).\] That is \[\frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + P_k H_t^TR_t^{-1}(Z-H_t\hat{x}_t).\] Summary of Continuous-Time KF \[\frac{d}{dt}\hat{x}_t=F_t \hat{x}_t + G_t u_t + K_t(Z-H_t\hat{x}_t),\\ \frac{d}{dt}P_t=-P_t H_t^TR_t^{-1}H_t^TP_t + F_tP_t + P_t F_t^T + Q_t,\\ K_t = P_k H_t^TR_t^{-1}.\] Accelerated Method for Riccati Equation The ODE of estimate covariance $P$ is a Differential Riccati Equation, which is computationally costly. To acclerate the algorithm, several algorithms have been proposed, including Transition Matrix Approach and Chandrasekhar Algorithm. Details can be found in the Chapter 8.3 in the Book: Optimal State Estimation: Kalman, H Infinity, and Nonlinear Approaches. Continuous-Time KF for correlated Noise Consider the following continuous-time system: \[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t,\,\, w_t \sim \mathcal{N}(0, Q_t)\\ y_t = H_t x_t + v_t,\,\, v_t \sim \mathcal{N}(0, R_t),\\ \mathbb{E}(w_t v_\tau^T) = M_t\delta(t-\tau).\] As $w_t$ and $v_\tau$ are correlated in time $t$, we need to decorrelate them. We can rewrite the system dynamics as \[\frac{d}{dt}x = F_t x_t + G_tu_t + w_t + M_tR_t^{-1}(y_t - H_t x_t - v_t)\\ = (F_t-M_tR_t^{-1}H_t)x_t + M_t R_{t}^{-1}y_t + (w_t - M_tR_t^{-1}v_t)\\ = \tilde{F}_t x_t + \tilde{u}_t + \tilde{w}_t.\] where \[\tilde{F}_t = F_t-M_tR_t^{-1}H_t,\,\, \tilde{u}_t=M_t R_{t}^{-1}y_t,\,\,\tilde{w}_t=w - M_tR_t^{-1}v_t.\] We have \[\mathbb{E}(\tilde{w}_t v_\tau^T) = \mathbb{E}(\tilde{w}_t v_\tau^T)= \mathbb{E}((w_t - M_tR_t^{-1}v_t) v_\tau^T) \\ = \mathbb{E}(w_t v_\tau^T) - M_tR_t^{-1}\mathbb{E}(v_t v_t^T) = M - M = 0\] and \[\tilde{Q}_t = \mathbb{E}(\tilde{w}_t \tilde{w}_t^T) = Q_t - M_t R_t^{-1} M_t^T.\] We can define the continuous-time Kalman Filter for this equivalent dynamics system. In the book, it also introduces how to tackle the non-white noise. The Steady-State Continuous-Time Kalman Filter [To Be Continue]]]></summary></entry></feed>

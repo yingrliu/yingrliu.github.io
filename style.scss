@@ -724,7 +724,7 @@ footer {
 
     li {
       display: inline-block;
-      margin: 10px;
+      margin: 15px;
     }
 
     svg {
@@ -749,6 +749,13 @@ footer {
       left: 0;
     }
   }
+}
+
+pre {
+  outline: 2px;
+  background-color: #f4f4f4;
+  font-family: 'Courier New', Monaco, monospace;
+  font-size: 90%;
 }
 
 // Settled on moving the import of syntax highlighting to the bottom of the CSS

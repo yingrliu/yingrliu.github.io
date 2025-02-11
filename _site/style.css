@@ -161,8 +161,8 @@ hr {
 
 ol > li:before, ul > li:before {
   position: absolute;
-  width: 1em;
-  margin-left: -1em;
+  width: 2em;
+  margin-left: -2em;
   display: inline-block;
   box-sizing: border-box;
   text-align: right;
@@ -189,8 +189,8 @@ ol > li:before {
 }
 
 ol > li, ul > li {
-  margin: 0 auto 1.4em 1em;
-  line-height: 1.55;
+  margin: 0 auto 1.4em 2em;
+  line-height: 1.6;
 }
 ol > li > ol,
 ol > li > ul, ul > li > ol,
@@ -201,7 +201,7 @@ ul > li > ul {
 li > ol > li,
 li > ul > li {
   font-size: 0.95em;
-  margin: 0 auto 1.33em 0.95em;
+  margin: 0 auto 1.33em 1.9em;
 }
 
 dt {
@@ -681,7 +681,7 @@ footer .svg-icon {
 }
 footer .svg-icon li {
   display: inline-block;
-  margin: 10px;
+  margin: 15px;
 }
 footer .svg-icon svg {
   height: 20px;
@@ -701,6 +701,13 @@ footer .svg-icon em {
   right: 0;
   bottom: 0;
   left: 0;
+}
+
+pre {
+  outline: 2px;
+  background-color: #f4f4f4;
+  font-family: 'Courier New', Monaco, monospace;
+  font-size: 90%;
 }
 
 pre, code {
