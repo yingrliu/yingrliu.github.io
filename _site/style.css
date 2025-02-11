@@ -704,7 +704,9 @@ footer .svg-icon em {
 }
 
 pre {
+  margin-top: .50em;
   outline: 2px;
+  text-wrap: wrap;
   background-color: #f4f4f4;
   font-family: 'Courier New', Monaco, monospace;
   font-size: 90%;
